@@ -49,6 +49,7 @@ public class DriftController : MonoBehaviour {
         //rigidBody.rotation = Quaternion.Euler(rot); // Physical transform
         transform.rotation = Quaternion.Euler(rot); // Animation transform
 
+
         // Get the local-axis velocity
         // +x, +y, and +z consitute to right, up, and forward
         Vector3 vel = transform.InverseTransformDirection(rigidBody.velocity);
@@ -73,9 +74,6 @@ public class DriftController : MonoBehaviour {
 
     // Update is called once multiple times per frame (according to physics setting)
     void FixedUpdate() {
-        //yRot += Input.GetAxis("Mouse X") * Sensitivity;
-        //transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, yRot, transform.localEulerAngles.z);
-        //rotation = Input.GetAxisRaw("Horizontal");
 
         isMoving = false;
 
@@ -83,11 +81,6 @@ public class DriftController : MonoBehaviour {
             rigidBody.velocity += transform.forward * Input.GetAxisRaw("Throttle") * accel * Time.deltaTime;
             isMoving = true;
         }
-
-        //if (Input.GetAxisRaw("Sideway") > 0.5f || Input.GetAxisRaw("Sideway") < -0.5f) {
-        //    rigidBody.velocity += transform.right * Input.GetAxisRaw("Sideway") * accel * Time.deltaTime;
-        //    isMoving = true;
-        //}
 
         if (Input.GetKeyDown(KeyCode.Space)) {
             //transform.Translate(Vector3.up * Accel * Time.deltaTime);
@@ -103,7 +96,6 @@ public class DriftController : MonoBehaviour {
 		}
 
         //anim.SetBool("isMoving", isMoving);
-        //anim.SetBool("isSprinting", isSprinting);
     }
 
     float Angle2Points(Vector3 a, Vector3 b) {

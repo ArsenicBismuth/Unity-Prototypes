@@ -670,6 +670,7 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Collab: 1
     UNet: 1
   luminIcon:
     m_Name: 
@@ -685,7 +686,7 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   cloudProjectId: 9765186d-5922-4c72-8d7a-2bb593d07e38
   framebufferDepthMemorylessMode: 0
-  projectName: Simulation (1)
+  projectName: Prototypes
   organizationId: arsenic-bismuth
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0

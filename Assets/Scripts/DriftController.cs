@@ -12,69 +12,36 @@ public class DriftController : MonoBehaviour {
     public float Rotate = 360.0f;   // In degree/second
 
     private Rigidbody rigidBody;
+    private Collider boxCollider;
+    private float distToGround;
 
-	private float accel;
+    private float rotate;
+    private float accel;
+    private float grip;
+
     private float isRight = 1.0f;
     private float isCW = 1.0f;
+
     private bool isMoving = false;
 	private bool isBoost = false;
+    private bool isGrounded = true;
+    private bool isTouch = false;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		rigidBody = GetComponent<Rigidbody>();
-	}
-	
-	// Update is called once per frame
-    void Update () {
-        // Get the Screen positions of the object
-        Vector2 objOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-        // Get the Screen position of the mouse
-        Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        // Get the angle between the points (absolute goal)
-        float angle = AngleOffset(-Angle2Points(objOnScreen, mouseOnScreen), -90.0f);
+        boxCollider = GetComponent<BoxCollider>();
+        distToGround = boxCollider.bounds.extents.y;   // Pivot to the outermost collider
+    }
 
-        // Rotation instant
-        //transform.rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
+    // Update is called once per frame
+    void Update() {
 
-        // Rotation gradual
-        Vector3 rot = transform.rotation.eulerAngles;
-
-        float delta = Mathf.DeltaAngle(angle, rot.y - 180);
-        isCW = delta > 0f ? 1f : -1f;
-        rot.y += isCW * Rotate * Time.deltaTime;    // Accelerate in opposing direction
-
-        delta = Mathf.DeltaAngle(angle, rot.y - 180);
-        if (delta * isCW < 0f) rot.y = angle;       // Check if changed polarity
-
-        //rigidBody.rotation = Quaternion.Euler(rot); // Physical transform
-        transform.rotation = Quaternion.Euler(rot); // Animation transform
-
-
-        // Get the local-axis velocity
-        // +x, +y, and +z consitute to right, up, and forward
-        Vector3 vel = transform.InverseTransformDirection(rigidBody.velocity);
-
-        // Sideway grip
-        isRight = vel.x > 0f ? 1f : -1f;
-        vel.x -= isRight * Grip * Time.deltaTime;   // Accelerate in opposing direction
-        if (vel.x * isRight < 0f) vel.x = 0f;       // Check if changed polarity
-
-        // Backward grip
-        if (vel.z < -1f) {
-            vel.z += Grip * Time.deltaTime;
-            if (vel.z > 0f) vel.z = 0f;
-        }
-
-        // Top speed
-        if (vel.z > TopSpeed) vel.z = TopSpeed;
-        else if (vel.z < -TopSpeed) vel.z = -TopSpeed;
-
-        rigidBody.velocity = transform.TransformDirection(vel);
     }
 
     // Update is called once multiple times per frame (according to physics setting)
     void FixedUpdate() {
-
+        /// Inputs
         isMoving = false;
 
         if (Input.GetAxisRaw("Throttle") > 0.5f || Input.GetAxisRaw("Throttle") < -0.5f) {
@@ -95,7 +62,66 @@ public class DriftController : MonoBehaviour {
             isBoost = false;
         }
 
+        rotate = Rotate;
+        grip = Grip;
+
+        // A short raycast to check below
+        isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
+        if (!isGrounded) {
+            rotate = 0f;
+            accel = 0f;
+            grip = 0f;
+        }
+
         //anim.SetBool("isMoving", isMoving);
+
+
+
+        /// Passives
+        // Get the Screen positions of the object
+        Vector2 objOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+        // Get the Screen position of the mouse
+        Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        // Get the angle between the points (absolute goal)
+        float angle = AngleOffset(-Angle2Points(objOnScreen, mouseOnScreen), -90.0f);
+
+        // Rotation instant
+        //transform.rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
+
+        // Rotation gradual
+        Vector3 rot = transform.rotation.eulerAngles;
+
+        float delta = Mathf.DeltaAngle(angle, rot.y - 180f);
+        isCW = delta > 0f ? 1f : -1f;
+        rot.y += isCW * rotate * Time.deltaTime;    // Accelerate in opposing direction
+
+        delta = Mathf.DeltaAngle(angle, rot.y - 180f);
+        if (delta * isCW < 0f) rot.y = angle;       // Check if changed polarity
+
+        //rigidBody.rotation = Quaternion.Euler(rot); // Physical transform
+        transform.rotation = Quaternion.Euler(rot); // Animation transform
+
+        
+        // Get the local-axis velocity
+        // +x, +y, and +z consitute to right, up, and forward
+        Vector3 vel = transform.InverseTransformDirection(rigidBody.velocity);
+
+        // Sideway grip
+        isRight = vel.x > 0f ? 1f : -1f;
+        vel.x -= isRight * grip * Time.deltaTime;   // Accelerate in opposing direction
+        if (vel.x * isRight < 0f) vel.x = 0f;       // Check if changed polarity
+
+        //// Backward grip
+        //if (vel.z < -1f) {
+        //    vel.z += grip * Time.deltaTime;
+        //    if (vel.z > 0f) vel.z = 0f;
+        //}
+
+        // Top speed
+        if (vel.z > TopSpeed) vel.z = TopSpeed;
+        else if (vel.z < -TopSpeed) vel.z = -TopSpeed;
+
+        rigidBody.velocity = transform.TransformDirection(vel);
 
     }
 

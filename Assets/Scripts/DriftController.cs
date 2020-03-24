@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,7 +27,7 @@ public class DriftController : MonoBehaviour {
 	// Update is called once per frame
     void Update () {
         // Get the Screen positions of the object
-        Vector2 objOnScreen = Camera.main.WorldToViewportPoint (transform.position);
+        Vector2 objOnScreen = Camera.main.WorldToViewportPoint(transform.position);
         // Get the Screen position of the mouse
         Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
         // Get the angle between the points (absolute goal)
@@ -87,15 +87,16 @@ public class DriftController : MonoBehaviour {
             rigidBody.velocity += transform.up * accel * Time.deltaTime;
         }
 
-		if (Input.GetAxisRaw("Sprint") > 0f) {
-			accel = Accel2;
-			isBoost = true;
-		} else if (Input.GetAxisRaw("Sprint") < 1f) {
-			accel = Accel;
-			isBoost = false;
-		}
+        if (Input.GetAxisRaw("Sprint") > 0f) {
+            accel = Accel2;
+            isBoost = true;
+        } else if (Input.GetAxisRaw("Sprint") < 1f) {
+            accel = Accel;
+            isBoost = false;
+        }
 
         //anim.SetBool("isMoving", isMoving);
+
     }
 
     float Angle2Points(Vector3 a, Vector3 b) {

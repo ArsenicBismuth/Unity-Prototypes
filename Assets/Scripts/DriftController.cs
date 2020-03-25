@@ -82,8 +82,8 @@ public class DriftController : MonoBehaviour {
         Vector2 objOnScreen = Camera.main.WorldToViewportPoint(transform.position);
         // Get the Screen position of the mouse
         Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        // Get the angle between the points (absolute goal)
-        float angle = AngleOffset(-Angle2Points(objOnScreen, mouseOnScreen), -90.0f);
+        // Get the angle between the points (absolute goal) = right (target) - left
+        float angle = -AngleOffset(Angle2Points(objOnScreen, mouseOnScreen), -90.0f);
 
         // Rotation instant
         //transform.rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
@@ -91,17 +91,36 @@ public class DriftController : MonoBehaviour {
         // Rotation gradual
         Vector3 rot = transform.rotation.eulerAngles;
 
-        float delta = Mathf.DeltaAngle(angle, rot.y - 180f);
+        // Delta = right (taget) - left (current)
+        float delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
+        Debug.Log(angle + " " + (rot.y - 180f) + " " + delta);
         isCW = delta > 0f ? 1f : -1f;
-        rot.y += isCW * rotate * Time.deltaTime;    // Accelerate in opposing direction
+        rot.y += isCW * rotate * Time.deltaTime;    // Rotate in the goal direction
 
-        delta = Mathf.DeltaAngle(angle, rot.y - 180f);
+        delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
         if (delta * isCW < 0f) rot.y = angle;       // Check if changed polarity
-
+        
         //rigidBody.rotation = Quaternion.Euler(rot); // Physical transform
         transform.rotation = Quaternion.Euler(rot); // Animation transform
 
-        
+        //// Rotation gradual
+        //Vector3 rot = transform.rotation.eulerAngles;
+        //Vector3 drot = new Vector3(0, 0, 0);   // Angular velocity
+
+        //// Delta = right (taget) - left (current)
+        //float delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
+        //Debug.Log(angle + " " + (rot.y - 180f) + " " + delta);
+        //isCW = delta > 0f ? 1f : -1f;
+        //drot.y = isCW * rotate * Time.deltaTime;     // Rotate in the goal direction
+
+        //delta = Mathf.DeltaAngle(AngleOffset(rot.y, drot.y), angle);
+        //if (delta * isCW < 0f) drot.y = delta;       // Check if changed polarity
+
+        ////rigidBody.rotation = Quaternion.Euler(rot); // Physical transform
+        ////transform.rotation = Quaternion.Euler(rot); // Animation transform
+        //transform.Rotate(drot, Space.Self); // Animation transform
+
+
         // Get the local-axis velocity
         // +x, +y, and +z consitute to right, up, and forward
         Vector3 vel = transform.InverseTransformDirection(rigidBody.velocity);
@@ -126,7 +145,7 @@ public class DriftController : MonoBehaviour {
     }
 
     float Angle2Points(Vector3 a, Vector3 b) {
-        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
+        return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
     }
 
     float AngleOffset(float raw, float offset) {

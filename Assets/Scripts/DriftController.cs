@@ -27,6 +27,9 @@ public class DriftController : MonoBehaviour {
     private bool isGrounded = true;
     private bool isTouch = false;
 
+    private Vector3 rot = new Vector3(0f,0f,0f);   // Euler angles, value to set transform.eulerAngles
+    private Vector3 drot = new Vector3(0f,0f,0f);  // Euler angles, value add to transform.eulerAngles
+
     // Use this for initialization
     void Start () {
 		rigidBody = GetComponent<Rigidbody>();
@@ -76,8 +79,6 @@ public class DriftController : MonoBehaviour {
         //anim.SetBool("isMoving", isMoving);
 
 
-
-        /// Passives
         // Get the Screen positions of the object
         Vector2 objOnScreen = Camera.main.WorldToViewportPoint(transform.position);
         // Get the Screen position of the mouse
@@ -86,41 +87,65 @@ public class DriftController : MonoBehaviour {
         float angle = -AngleOffset(Angle2Points(objOnScreen, mouseOnScreen), -90.0f);
 
         // Rotation instant
-        //transform.rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
+        //if (rotate > 0f) {
+        //    rot = transform.eulerAngles;
+        //    rot.y = angle;
+        //    transform.eulerAngles = rot;
+        //}
 
-        // Rotation gradual
-        Vector3 rot = transform.rotation.eulerAngles;
+        // Rotation gradual - Absolute target
+        // Don't read eulerAngles, only write: https://answers.unity.com/questions/462073/
 
-        // Delta = right (taget) - left (current)
-        float delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
-        Debug.Log(angle + " " + (rot.y - 180f) + " " + delta);
-        isCW = delta > 0f ? 1f : -1f;
-        rot.y += isCW * rotate * Time.deltaTime;    // Rotate in the goal direction
+        // Delta = right(taget) - left(current)
+        //rot = transform.eulerAngles;
+        //rot.y = AngleOffset(rot.y, 0f);
+        //Debug.Log("--- " + rot.y);
 
-        delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
-        if (delta * isCW < 0f) rot.y = angle;       // Check if changed polarity
-        
-        //rigidBody.rotation = Quaternion.Euler(rot); // Physical transform
-        transform.rotation = Quaternion.Euler(rot); // Animation transform
-
-        //// Rotation gradual
-        //Vector3 rot = transform.rotation.eulerAngles;
-        //Vector3 drot = new Vector3(0, 0, 0);   // Angular velocity
-
-        //// Delta = right (taget) - left (current)
-        //float delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
-        //Debug.Log(angle + " " + (rot.y - 180f) + " " + delta);
+        //float delta = Mathf.DeltaAngle(rot.y, angle);
         //isCW = delta > 0f ? 1f : -1f;
-        //drot.y = isCW * rotate * Time.deltaTime;     // Rotate in the goal direction
+        //rot.y += isCW * rotate * Time.deltaTime;
+        //rot.y = AngleOffset(rot.y, 0f);
+        //Debug.Log(rot.y);
 
-        //delta = Mathf.DeltaAngle(AngleOffset(rot.y, drot.y), angle);
-        //if (delta * isCW < 0f) drot.y = delta;       // Check if changed polarity
+        //delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
+        //if (delta * isCW < 0f) rot.y = angle;       // Check if changed polarity
 
         ////rigidBody.rotation = Quaternion.Euler(rot); // Physical transform
-        ////transform.rotation = Quaternion.Euler(rot); // Animation transform
-        //transform.Rotate(drot, Space.Self); // Animation transform
+        ////transform.eulerAngles = rot; // Animation transform
+
+        //// You can't set them directly as it'll set x & z to zero.
+        //transform.eulerAngles = rot;
+        ////transform.rotation = Quaternion.AngleAxis(rot.y, Vector3.up);
+        ////rigidBody.MoveRotation(Quaternion.Euler(rot));
+        //Debug.Log(rot);
 
 
+        // Rotation gradual - Relative target
+        // Delta = right(taget) - left(current)
+        rot = transform.eulerAngles;
+        rot.y = AngleOffset(rot.y, 0f);
+        Debug.Log("--- " + rot.y);
+
+        float delta = Mathf.DeltaAngle(rot.y, angle);
+        isCW = delta > 0f ? 1f : -1f;
+        drot.y = isCW * rotate * Time.deltaTime;
+        rot.y = AngleOffset(rot.y, 0f);
+
+        delta = Mathf.DeltaAngle(AngleOffset(rot.y, drot.y), angle);
+        if (delta * isCW < 0f) drot.y = 0;       // Check if changed polarity
+        Debug.Log(drot.y);
+
+        // You can't set them directly as it'll set x & z to zero.
+        rigidBody.rotation *= Quaternion.AngleAxis(drot.y, Vector3.up);
+        //transform.rotation *= Quaternion.AngleAxis(drot.y, Vector3.up);
+        //transform.Rotate(drot, Space.Self);
+        //rigidBody.AddTorque(drot);
+        //rigidBody.MoveRotation(rigidBody.rotation * Quaternion.Euler(drot));
+        Debug.Log(rot);
+
+
+
+        /// Passives
         // Get the local-axis velocity
         // +x, +y, and +z consitute to right, up, and forward
         Vector3 vel = transform.InverseTransformDirection(rigidBody.velocity);
@@ -149,9 +174,9 @@ public class DriftController : MonoBehaviour {
     }
 
     float AngleOffset(float raw, float offset) {
-        raw += offset;
-        if (raw > 180.0f) raw = -360.0f + raw;
-        if (raw < -180.0f) raw = 360.0f + raw;
+        raw = (raw + offset) % 360;             // Mod by 360, to not exceed 360
+        if (raw > 180.0f) raw -= 360.0f;
+        if (raw < -180.0f) raw += 360.0f;
         return raw;
     }
 }

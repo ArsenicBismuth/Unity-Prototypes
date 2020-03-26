@@ -11,6 +11,11 @@ public class DriftController : MonoBehaviour {
     public float Grip = 3.0f;       // In meters/second2
     public float Rotate = 360.0f;   // In degree/second
 
+    // Ground & air angular drag
+    // reduce stumbling time on ground but maintain on-air one
+    public float AngDragG = 5.0f;
+    public float AngDragA = 0.05f;
+
     private Rigidbody rigidBody;
     private Collider boxCollider;
     private float distToGround;
@@ -26,6 +31,7 @@ public class DriftController : MonoBehaviour {
 	private bool isBoost = false;
     private bool isGrounded = true;
     private bool isTouch = false;
+    private bool isStumbling = false;
 
     private Vector3 rot = new Vector3(0f,0f,0f);   // Euler angles, value to set transform.eulerAngles
     private Vector3 drot = new Vector3(0f,0f,0f);  // Euler angles, value add to transform.eulerAngles
@@ -67,6 +73,7 @@ public class DriftController : MonoBehaviour {
 
         rotate = Rotate;
         grip = Grip;
+        rigidBody.angularDrag = AngDragG;
 
         // A short raycast to check below
         isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
@@ -74,6 +81,13 @@ public class DriftController : MonoBehaviour {
             rotate = 0f;
             accel = 0f;
             grip = 0f;
+            rigidBody.angularDrag = AngDragA;
+        }
+
+        // Prevent the rotational input intervenes with physics angular velocity 
+        isStumbling = rigidBody.angularVelocity.magnitude > 0.1f * Rotate * Time.deltaTime;
+        if (isStumbling) {
+            rotate = 0f;
         }
 
         //anim.SetBool("isMoving", isMoving);
@@ -93,9 +107,40 @@ public class DriftController : MonoBehaviour {
         //    transform.eulerAngles = rot;
         //}
 
-        // Rotation gradual - Absolute target
-        // Don't read eulerAngles, only write: https://answers.unity.com/questions/462073/
+        /* Advised to not read eulerAngles, only write: https://answers.unity.com/questions/462073/
+         * As it turns out, the problem isn't there. */
 
+        /* As is: Conflict with physical Y-axis rotation, must be disabled.
+         * Current methods:
+         * 1. Prevent rotational input when there's angular velocity.
+         * 2. Significantly increase angular drag while grounded.
+         * 3. Result: rotation responding to environment, responsive input, & natural stumbling.
+         */
+
+        // Rotation gradual - Absolute target
+        // Delta = right(taget) - left(current)
+        rot = transform.eulerAngles;
+        rot.y = AngleOffset(rot.y, 0f);
+        //Debug.Log("--- " + rot.y);
+
+        float delta = Mathf.DeltaAngle(rot.y, angle);
+        isCW = delta > 0f ? 1f : -1f;
+        rot.y += isCW * rotate * Time.deltaTime;
+        rot.y = AngleOffset(rot.y, 0f);
+        //Debug.Log(rot.y);
+
+        delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
+        if (delta * isCW < 0f) rot.y = angle;       // Check if changed polarity
+
+        // You can't set them directly as it'll set x & z to zero
+        // if you're not using eulerAngles.x & z.
+        transform.eulerAngles = rot;
+        //transform.rotation = Quaternion.AngleAxis(rot.y, Vector3.up);
+        //rigidBody.MoveRotation(Quaternion.Euler(rot));
+        //Debug.Log(rot);
+
+
+        // Rotation gradual - Relative target
         // Delta = right(taget) - left(current)
         //rot = transform.eulerAngles;
         //rot.y = AngleOffset(rot.y, 0f);
@@ -103,45 +148,20 @@ public class DriftController : MonoBehaviour {
 
         //float delta = Mathf.DeltaAngle(rot.y, angle);
         //isCW = delta > 0f ? 1f : -1f;
-        //rot.y += isCW * rotate * Time.deltaTime;
+        //drot.y = isCW * rotate * Time.deltaTime;
         //rot.y = AngleOffset(rot.y, 0f);
-        //Debug.Log(rot.y);
 
-        //delta = Mathf.DeltaAngle(AngleOffset(rot.y, 0f), angle);
-        //if (delta * isCW < 0f) rot.y = angle;       // Check if changed polarity
+        //delta = Mathf.DeltaAngle(AngleOffset(rot.y, drot.y), angle);
+        //if (delta * isCW < 0f) drot.y = 0;       // Check if changed polarity
+        //Debug.Log(drot.y);
 
-        ////rigidBody.rotation = Quaternion.Euler(rot); // Physical transform
-        ////transform.eulerAngles = rot; // Animation transform
-
-        //// You can't set them directly as it'll set x & z to zero.
-        //transform.eulerAngles = rot;
-        ////transform.rotation = Quaternion.AngleAxis(rot.y, Vector3.up);
-        ////rigidBody.MoveRotation(Quaternion.Euler(rot));
+        //// Add the drot to current rotation
+        //transform.rotation *= Quaternion.AngleAxis(drot.y, transform.up);
+        ////rigidBody.rotation *= Quaternion.AngleAxis(drot.y, transform.up);
+        ////transform.Rotate(drot, Space.Self);
+        ////rigidBody.AddTorque(drot);
+        ////rigidBody.MoveRotation(rigidBody.rotation * Quaternion.Euler(drot));
         //Debug.Log(rot);
-
-
-        // Rotation gradual - Relative target
-        // Delta = right(taget) - left(current)
-        rot = transform.eulerAngles;
-        rot.y = AngleOffset(rot.y, 0f);
-        Debug.Log("--- " + rot.y);
-
-        float delta = Mathf.DeltaAngle(rot.y, angle);
-        isCW = delta > 0f ? 1f : -1f;
-        drot.y = isCW * rotate * Time.deltaTime;
-        rot.y = AngleOffset(rot.y, 0f);
-
-        delta = Mathf.DeltaAngle(AngleOffset(rot.y, drot.y), angle);
-        if (delta * isCW < 0f) drot.y = 0;       // Check if changed polarity
-        Debug.Log(drot.y);
-
-        // You can't set them directly as it'll set x & z to zero.
-        rigidBody.rotation *= Quaternion.AngleAxis(drot.y, Vector3.up);
-        //transform.rotation *= Quaternion.AngleAxis(drot.y, Vector3.up);
-        //transform.Rotate(drot, Space.Self);
-        //rigidBody.AddTorque(drot);
-        //rigidBody.MoveRotation(rigidBody.rotation * Quaternion.Euler(drot));
-        Debug.Log(rot);
 
 
 

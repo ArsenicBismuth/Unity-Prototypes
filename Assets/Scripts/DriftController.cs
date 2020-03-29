@@ -75,6 +75,12 @@ public class DriftController : MonoBehaviour {
         grip = Grip;
         rigidBody.angularDrag = AngDragG;
 
+        //accel = accel * Mathf.Cos(transform.localEulerAngles.z * Mathf.Deg2Rad);
+        //accel = accel > 0f ? accel : 0f;
+        //grip = grip * Mathf.Cos(transform.localEulerAngles.x * Mathf.Deg2Rad);
+        //grip = grip > 0f ? grip : 0f;
+        Debug.Log(transform.localEulerAngles.z + " " + accel);
+        
         // A short raycast to check below
         isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
         if (!isGrounded) {

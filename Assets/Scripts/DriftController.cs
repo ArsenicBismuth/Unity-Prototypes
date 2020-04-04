@@ -59,10 +59,11 @@ public class DriftController : MonoBehaviour {
         grip = Grip;
         rigidBody.angularDrag = AngDragG;
 
-        //accel = accel * Mathf.Cos(transform.localEulerAngles.z * Mathf.Deg2Rad);
-        //accel = accel > 0f ? accel : 0f;
-        //grip = grip * Mathf.Cos(transform.localEulerAngles.x * Mathf.Deg2Rad);
-        //grip = grip > 0f ? grip : 0f;
+        // Adjustment in slope
+        accel = accel * Mathf.Cos(transform.localEulerAngles.x * Mathf.Deg2Rad);
+        accel = accel > 0f ? accel : 0f;
+        grip = grip * Mathf.Cos(transform.localEulerAngles.z * Mathf.Deg2Rad);
+        grip = grip > 0f ? grip : 0f;
         Debug.Log(transform.localEulerAngles.z + " " + accel);
 
         // A short raycast to check below
@@ -77,12 +78,12 @@ public class DriftController : MonoBehaviour {
         // Prevent the rotational input intervenes with physics angular velocity 
         isStumbling = rigidBody.angularVelocity.magnitude > 0.1f * Rotate * Time.deltaTime;
         if (isStumbling) {
-            rotate = 0f;
+            //rotate = 0f;
         }
 
         //anim.SetBool("isMoving", isMoving);
         #endregion
-        
+
         #region Inputs
         isMoving = false;
 
@@ -92,8 +93,12 @@ public class DriftController : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.Space)) {
-            //transform.Translate(Vector3.up * Accel * Time.deltaTime);
             rigidBody.velocity += transform.up * accel * Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R)) {  // Reset
+            transform.eulerAngles = new Vector3(0,0,0);
+            transform.position += Vector3.up * 2;
         }
 
         if (Input.GetAxisRaw("Sprint") > 0f) {
@@ -104,9 +109,13 @@ public class DriftController : MonoBehaviour {
             isBoost = false;
         }
 
+        // Get the local-axis velocity before rotation (+x, +y, and +z = right, up, and forward)
+        Vector3 pvel = transform.InverseTransformDirection(rigidBody.velocity);
+
         // Turn by keyboard
         if (Input.GetAxisRaw("Sideways") > 0.5f || Input.GetAxisRaw("Sideways") < -0.5f) {
-            rotate_grad_key(Input.GetAxisRaw("Sideways"));
+            isCW = Input.GetAxisRaw("Sideways");
+            rotate_grad_key();
             isMoving = true;
         }
 
@@ -118,19 +127,13 @@ public class DriftController : MonoBehaviour {
         // Get the angle between the points (absolute goal) = right (target) - left
         float angle = -AngleOffset(Angle2Points(objOnScreen, mouseOnScreen), -90.0f);
 
-        // Rotation instant
-        //rotate_instant(angle);
-
-        // Rotation gradual - Absolute target
-        //rotate_grad_abs(angle);
-
-        // Rotation gradual - Relative target
-        //rotate_grad_rel(angle);
+        //rotate_instant(angle);    // Rotation instant
+        //rotate_grad_abs(angle);   // Rotation gradual - Absolute target
+        //rotate_grad_rel(angle);   // Rotation gradual - Relative target
         #endregion
-        
+
         #region Passives
-        // Get the local-axis velocity
-        // +x, +y, and +z consitute to right, up, and forward
+        // Get the local-axis velocity after rotation
         Vector3 vel = transform.InverseTransformDirection(rigidBody.velocity);
 
         // Sideway grip
@@ -138,11 +141,14 @@ public class DriftController : MonoBehaviour {
         vel.x -= isRight * grip * Time.deltaTime;   // Accelerate in opposing direction
         if (vel.x * isRight < 0f) vel.x = 0f;       // Check if changed polarity
 
-        //// Backward grip
-        //if (vel.z < -1f) {
-        //    vel.z += grip * Time.deltaTime;
-        //    if (vel.z > 0f) vel.z = 0f;
-        //}
+        // TODO: Transfer some to forward momentum (in the new direction)
+        //vel.z = pvel.z;
+
+        // Backward grip
+        if (vel.z < -1f) {
+            vel.z += grip/2 * Time.deltaTime;
+            if (vel.z > 0f) vel.z = 0f;
+        }
 
         // Top speed
         if (vel.z > TopSpeed) vel.z = TopSpeed;
@@ -183,15 +189,10 @@ public class DriftController : MonoBehaviour {
         }
     }
 
-    void rotate_grad_key(float isCW) {
+    void rotate_grad_key() {
         // Delta = right(taget) - left(current)
-        rot = transform.eulerAngles;
-        rot.y = AngleOffset(rot.y, 0f);
-
-        rot.y += isCW * rotate * Time.deltaTime;
-        rot.y = AngleOffset(rot.y, 0f);
-
-        transform.eulerAngles = rot;
+        drot.y = isCW * rotate * Time.deltaTime;
+        transform.rotation *= Quaternion.AngleAxis(drot.y, transform.up);
     }
 
     void rotate_grad_abs(float angle) {

@@ -12,7 +12,7 @@ public class DriftController : MonoBehaviour {
     public float GripX = 3.0f;          // In meters/second2
     public float GripZ = 0.5f;          // In meters/second2
     public float Rotate = 360.0f;       // In degree/second
-    public float RotVelocity = 0.8f;    // Ratio of forward velocity transfered on rotation
+    public float RotVel = 0.8f;    // Ratio of forward velocity transfered on rotation
 
     // Ground & air angular drag
     // reduce stumbling time on ground but maintain on-air one
@@ -76,7 +76,7 @@ public class DriftController : MonoBehaviour {
         gripX = gripX > 0f ? gripX : 0f;
 
         // A short raycast to check below
-        isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
+        isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 1f);
         if (!isGrounded) {
             rotate = 0f;
             accel = 0f;
@@ -121,6 +121,7 @@ public class DriftController : MonoBehaviour {
 
         // Get the local-axis velocity before rotation (+x, +y, and +z = right, up, and forward)
         Vector3 pvel = transform.InverseTransformDirection(rigidbody.velocity);
+        float speed = pvel.magnitude;
 
         isRotating = false;
 
@@ -150,7 +151,10 @@ public class DriftController : MonoBehaviour {
         // Rotate the velocity vector
         // TODO: Tweak more, still feels strange
         //vel = pvel;                   // Transfer all
-        if (isRotating) vel = vel * 0.5f + pvel * 0.5f; // Partial transfer
+        if (isRotating) {
+            vel = vel * (1 - RotVel) + pvel * RotVel; // Partial transfer
+            vel = vel.normalized * speed;
+        }
 
         // Sideway grip
         isRight = vel.x > 0f ? 1f : -1f;

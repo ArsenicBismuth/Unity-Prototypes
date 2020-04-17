@@ -5,19 +5,22 @@ using UnityEngine;
 public class DriftController : MonoBehaviour {
 
     #region Parameters
-    public float Accel = 25.0f;         // In meters/second2
-    public float Accel2 = 40.0f;
-    public float TopSpeed = 100.0f;     // In meters/second
+    public float Accel = 15.0f;         // In meters/second2
+    public float Accel2 = 30.0f;
+    public float TopSpeed = 20.0f;     // In meters/second
     public float Jump = 3.0f;           // In meters/second2
-    public float GripX = 3.0f;          // In meters/second2
-    public float GripZ = 0.5f;          // In meters/second2
-    public float Rotate = 360.0f;       // In degree/second
-    public float RotVel = 0.8f;    // Ratio of forward velocity transfered on rotation
+    public float GripX = 6.0f;          // In meters/second2
+    public float GripZ = 3.0f;          // In meters/second2
+    public float Rotate = 270.0f;       // In degree/second
+    public float RotVel = 0.5f;    // Ratio of forward velocity transfered on rotation
 
     // Ground & air angular drag
     // reduce stumbling time on ground but maintain on-air one
     public float AngDragG = 5.0f;
     public float AngDragA = 0.05f;
+
+    private float MinRotSpd = 2f;          // Speed to start rotating
+    private float MaxRotSpd = 6f;          // Speed to reach max rotation
     #endregion
 
     #region Intermediate
@@ -35,6 +38,7 @@ public class DriftController : MonoBehaviour {
     private float isRight = 1.0f;
     private float isForward = 1.0f;
     private float isCW = 1.0f;
+    private float speed = 0f;
 
     private bool isMoving = false;
     private bool isRotating = false;
@@ -76,7 +80,7 @@ public class DriftController : MonoBehaviour {
         gripX = gripX > 0f ? gripX : 0f;
 
         // A short raycast to check below
-        isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 1f);
+        isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 0.2f);
         if (!isGrounded) {
             rotate = 0f;
             accel = 0f;
@@ -89,6 +93,14 @@ public class DriftController : MonoBehaviour {
         isStumbling = rigidbody.angularVelocity.magnitude > 0.1f * Rotate * Time.deltaTime;
         if (isStumbling) {
             //rotate = 0f;
+        }
+
+        // Adjustment of angular velocity to speed magnitude
+        if (speed < MinRotSpd) {
+            rotate = 0f;
+        } else {
+            rotate = speed / MaxRotSpd * rotate;
+            if (rotate > Rotate) rotate = Rotate;
         }
 
         //anim.SetBool("isMoving", isMoving);
@@ -121,7 +133,7 @@ public class DriftController : MonoBehaviour {
 
         // Get the local-axis velocity before rotation (+x, +y, and +z = right, up, and forward)
         Vector3 pvel = transform.InverseTransformDirection(rigidbody.velocity);
-        float speed = pvel.magnitude;
+        speed = pvel.magnitude;
 
         isRotating = false;
 

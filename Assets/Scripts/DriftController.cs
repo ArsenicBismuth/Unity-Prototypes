@@ -2,54 +2,70 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Global enum
+public enum Faction {
+    Player,
+    Enemy,
+    Neutral
+};
+
+
+
 public class DriftController : MonoBehaviour {
 
     #region Parameters
     public float Accel = 15.0f;         // In meters/second2
-    public float Accel2 = 30.0f;
-    public float TopSpeed = 20.0f;     // In meters/second
+    public float Boost = 4f/3;          // In ratio
+    public float TopSpeed = 20.0f;      // In meters/second
     public float Jump = 3.0f;           // In meters/second2
     public float GripX = 6.0f;          // In meters/second2
     public float GripZ = 3.0f;          // In meters/second2
     public float Rotate = 270.0f;       // In degree/second
-    public float RotVel = 0.5f;    // Ratio of forward velocity transfered on rotation
+    public float RotVel = 0.5f;         // Ratio of forward velocity transfered on rotation
+    
+    public Faction carFaction = Faction.Player;  // Drop-down to select faction of this object
+    public Transform Target;            // Target for the AI to act upon
 
     // Ground & air angular drag
     // reduce stumbling time on ground but maintain on-air one
-    public float AngDragG = 5.0f;
-    public float AngDragA = 0.05f;
+    float AngDragG = 5.0f;
+    float AngDragA = 0.05f;
 
-    private float MinRotSpd = 2f;          // Speed to start rotating
-    private float MaxRotSpd = 6f;          // Speed to reach max rotation
+    float MinRotSpd = 2f;          // Speed to start rotating
+    float MaxRotSpd = 6f;          // Speed to reach max rotation
     #endregion
 
     #region Intermediate
-    private Rigidbody rigidbody;
-    private Collider boxCollider;
-    private float distToGround;
+    Rigidbody rigidbody;
+    Collider boxCollider;
+    float distToGround;
 
     // The actual value to be used (modification of parameters)
-    private float rotate;
-    private float accel;
-    private float gripX;
-    private float gripZ;
+    float rotate;
+    float accel;
+    float gripX;
+    float gripZ;
 
     // For determining drag direction
-    private float isRight = 1.0f;
-    private float isForward = 1.0f;
-    private float isCW = 1.0f;
-    private float speed = 0f;
+    float isRight = 1.0f;
+    float isForward = 1.0f;
+    float speed = 0f;
 
-    private bool isMoving = false;
-    private bool isRotating = false;
-	private bool isBoost = false;
-    private bool isGrounded = true;
-    private bool isTouch = false;
-    private bool isStumbling = false;
+    bool isRotating = false;
+    bool isGrounded = true;
+    bool isStumbling = false;
 
-    private Vector3 rot = new Vector3(0f,0f,0f);   // Euler angles, value to set transform.eulerAngles
-    private Vector3 drot = new Vector3(0f,0f,0f);  // Euler angles, value add to transform.eulerAngles
+    // Control signals
+    float inThrottle = 0f;
+    float inTurn = 0f;
+    bool inReset = false;
+    bool inBoost = false;
+    
+    Vector3 vel = new Vector3(0f, 0f, 0f);
+    Vector3 pvel = new Vector3(0f, 0f, 0f);
     #endregion
+
+
 
     // Use this for initialization
     void Start () {
@@ -66,6 +82,7 @@ public class DriftController : MonoBehaviour {
     // Update is called once multiple times per frame (according to physics setting)
     void FixedUpdate() {
         #region Situational Check
+        accel = Accel;
         rotate = Rotate;
         gripX = GripX;
         gripZ = GripZ;
@@ -106,59 +123,26 @@ public class DriftController : MonoBehaviour {
         //anim.SetBool("isMoving", isMoving);
         #endregion
 
-        #region Inputs
-        isMoving = false;
-
-        if (Input.GetAxisRaw("Throttle") > 0.5f || Input.GetAxisRaw("Throttle") < -0.5f) {
-            rigidbody.velocity += transform.forward * Input.GetAxisRaw("Throttle") * accel * Time.deltaTime;
-            gripZ = 0f;     // Remove straight grip if wheel is rotating
+        // Get command from keyboard or simple AI (conditional rulesets)
+        switch(carFaction) {
+            case Faction.Player:
+                InputKeyboard();
+                break;
+            case Faction.Enemy:
+                InputAI();
+                break;
+            default:
+                // Do nothing
+                break;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            rigidbody.velocity += transform.up * accel * Time.deltaTime;
-        }
+        // Execute the commands
+        Controller();
 
-        if (Input.GetKeyDown(KeyCode.R)) {  // Reset
-            transform.eulerAngles = new Vector3(0,0,0);
-            transform.position += Vector3.up * 2;
-        }
-
-        if (Input.GetAxisRaw("Sprint") > 0f) {
-            accel = Accel2;
-            isBoost = true;
-        } else if (Input.GetAxisRaw("Sprint") < 1f) {
-            accel = Accel;
-            isBoost = false;
-        }
-
-        // Get the local-axis velocity before rotation (+x, +y, and +z = right, up, and forward)
-        Vector3 pvel = transform.InverseTransformDirection(rigidbody.velocity);
-        speed = pvel.magnitude;
-
-        isRotating = false;
-
-        // Turn by keyboard
-        if (Input.GetAxisRaw("Sideways") > 0.5f || Input.GetAxisRaw("Sideways") < -0.5f) {
-            isCW = Input.GetAxisRaw("Sideways");
-            rotate_grad_key();
-        }
-
-        // Turn by facing cursor
-        // Get the Screen positions of the object
-        Vector2 objOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-        // Get the Screen position of the mouse
-        Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        // Get the angle between the points (absolute goal) = right (target) - left
-        float angle = -AngleOffset(Angle2Points(objOnScreen, mouseOnScreen), -90.0f);
-
-        //rotate_instant(angle);    // Rotation instant
-        //rotate_grad_abs(angle);   // Rotation gradual - Absolute target
-        //rotate_grad_rel(angle);   // Rotation gradual - Relative target
-        #endregion
 
         #region Passives
         // Get the local-axis velocity after rotation
-        Vector3 vel = transform.InverseTransformDirection(rigidbody.velocity);
+        vel = transform.InverseTransformDirection(rigidbody.velocity);
 
         // Rotate the velocity vector
         // TODO: Tweak more, still feels strange
@@ -187,8 +171,11 @@ public class DriftController : MonoBehaviour {
 
     }
 
+
+
     float Angle2Points(Vector3 a, Vector3 b) {
-        return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
+        //return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
+        return Mathf.Atan2(b.x - a.x, b.z - a.z) * Mathf.Rad2Deg;
     }
 
     float AngleOffset(float raw, float offset) {
@@ -197,6 +184,69 @@ public class DriftController : MonoBehaviour {
         if (raw < -180.0f) raw += 360.0f;
         return raw;
     }
+
+
+
+    // Get input values from keyboard
+    void InputKeyboard() {
+        inThrottle = Input.GetAxisRaw("Throttle");
+        inReset = Input.GetKeyDown(KeyCode.R);
+        inBoost = Input.GetAxisRaw("Boost") > 0f;
+        inTurn = Input.GetAxisRaw("Sideways");
+    }
+
+    void InputAI() {
+        inThrottle = 1f;
+
+        // Turn by facing player
+        // Get the Screen positions of the this object & player
+        //Vector2 thisOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+        //Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        //Vector2 targetOnScreen = Camera.main.WorldToViewportPoint(Target.position);
+        //float angle = -AngleOffset(Angle2Points(thisOnScreen, targetOnScreen), -90.0f);
+
+        // Turn by facing player
+        // Get the angle between the points (absolute goal) = right (target) - left
+        float angle = AngleOffset(Angle2Points(transform.position, Target.position), 0f);
+
+        Vector3 rot = transform.eulerAngles;
+        float delta = Mathf.DeltaAngle(rot.y, angle);
+        inTurn = delta > 0f ? 1f : -1f;
+
+        // TODO: Make functions below to be compatible with current system, only outputting "inTurn".
+        //RotateInstant(angle);    // Rotation instant
+        //RotateGradAbsolute(angle);   // Rotation gradual - Absolute target
+        //RotateGradRelative(angle);   // Rotation gradual - Relative target
+    }
+
+    // Executing the queued inputs
+    void Controller() {
+
+        if (inBoost) accel *= Boost; // Higher acceleration
+
+        if (inThrottle > 0.5f || inThrottle < -0.5f) {
+            rigidbody.velocity += transform.forward * inThrottle * accel * Time.deltaTime;
+            gripZ = 0f;     // Remove straight grip if wheel is rotating
+        }
+
+        if (inReset) {  // Reset
+            transform.eulerAngles = new Vector3(0, 0, 0);
+            transform.position += Vector3.up * 2;
+        }
+        
+        isRotating = false;
+
+        // Get the local-axis velocity before new input (+x, +y, and +z = right, up, and forward)
+        pvel = transform.InverseTransformDirection(rigidbody.velocity);
+        speed = pvel.magnitude;
+
+        // Turn statically
+        if (inTurn > 0.5f || inTurn < -0.5f) {
+            RotateGradConst(inTurn);
+        }
+    }
+
+
 
     #region Rotation methods
     /* Advised to not read eulerAngles, only write: https://answers.unity.com/questions/462073/
@@ -209,29 +259,31 @@ public class DriftController : MonoBehaviour {
      * 3. Result: rotation responding to environment, responsive input, & natural stumbling.
      */
 
-    void rotate_instant(float angle) {
+    Vector3 drot = new Vector3(0f, 0f, 0f);
+
+    void RotateInstant(float angle) {
         if (rotate > 0f) {
-            rot = transform.eulerAngles;
+            Vector3 rot = transform.eulerAngles;
             rot.y = angle;
             transform.eulerAngles = rot;
             isRotating = true;
         }
     }
 
-    void rotate_grad_key() {
+    void RotateGradConst(float isCW) {
         // Delta = right(taget) - left(current)
         drot.y = isCW * rotate * Time.deltaTime;
         transform.rotation *= Quaternion.AngleAxis(drot.y, transform.up);
         isRotating = true;
     }
 
-    void rotate_grad_abs(float angle) {
+    void RotateGradAbsolute(float angle) {
         // Delta = right(taget) - left(current)
-        rot = transform.eulerAngles;
+        Vector3 rot = transform.eulerAngles;
         rot.y = AngleOffset(rot.y, 0f);
 
         float delta = Mathf.DeltaAngle(rot.y, angle);
-        isCW = delta > 0f ? 1f : -1f;
+        float isCW = delta > 0f ? 1f : -1f;
         rot.y += isCW * rotate * Time.deltaTime;
         rot.y = AngleOffset(rot.y, 0f);
 
@@ -246,15 +298,17 @@ public class DriftController : MonoBehaviour {
         //rigidbody.MoveRotation(Quaternion.Euler(rot));
     }
 
-    void rotate_grad_rel(float angle) {
+    void RotateGradRelative(float angle) {
         // Delta = right(taget) - left(current)
-        rot = transform.eulerAngles;
+        Vector3 rot = transform.eulerAngles;
         rot.y = AngleOffset(rot.y, 0f);
 
         float delta = Mathf.DeltaAngle(rot.y, angle);
-        isCW = delta > 0f ? 1f : -1f;
+        float isCW = delta > 0f ? 1f : -1f;
+
+        // Value add to transform.eulerAngles
         drot.y = isCW * rotate * Time.deltaTime;
-        rot.y = AngleOffset(rot.y, 0f);
+        drot.y = AngleOffset(rot.y, 0f);
 
         delta = Mathf.DeltaAngle(AngleOffset(rot.y, drot.y), angle);
         if (delta * isCW < 0f) drot.y = 0;       // Check if changed polarity
@@ -268,4 +322,5 @@ public class DriftController : MonoBehaviour {
         //rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(drot));
     }
     #endregion
+
 }

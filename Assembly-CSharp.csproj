@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\DriftController.cs" />
     <Compile Include="Assets\Scripts\FollowingCamera.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
+    <Compile Include="Assets\Scripts\Wheel.cs" />
     <Compile Include="Assets\Tutorial_Info\Scripts\Readme.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

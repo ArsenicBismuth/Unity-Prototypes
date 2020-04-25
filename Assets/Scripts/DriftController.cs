@@ -33,11 +33,15 @@ public class DriftController : MonoBehaviour {
 
     float MinRotSpd = 2f;          // Speed to start rotating
     float MaxRotSpd = 6f;          // Speed to reach max rotation
+
+    // AI-specific parameters
+    [Header("AI Behaviors")]
+    public float turnTh = 20f;      // Delta threshold to goal before start turning
     #endregion
 
     #region Intermediate
     Rigidbody rigidbody;
-    Collider boxCollider;
+    Bounds groupCollider;
     float distToGround;
 
     // The actual value to be used (modification of parameters)
@@ -57,7 +61,7 @@ public class DriftController : MonoBehaviour {
 
     // Control signals
     float inThrottle = 0f;
-    float inTurn = 0f;
+    [HideInInspector] public float inTurn = 0f;
     bool inReset = false;
     bool inBoost = false;
     
@@ -70,8 +74,11 @@ public class DriftController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		rigidbody = GetComponent<Rigidbody>();
-        boxCollider = GetComponent<BoxCollider>();
-        distToGround = boxCollider.bounds.extents.y;   // Pivot to the outermost collider
+        
+        groupCollider = GetBounds(gameObject);     // Get the full collider boundary of group
+        distToGround = groupCollider.extents.y;    // Pivot to the outermost collider
+
+        //distToGround = transform.position.y + 1f;
     }
 
     // Update is called once per frame
@@ -89,15 +96,15 @@ public class DriftController : MonoBehaviour {
         rigidbody.angularDrag = AngDragG;
 
         // Adjustment in slope
-        accel = accel * Mathf.Cos(transform.localEulerAngles.x * Mathf.Deg2Rad);
+        accel = accel * Mathf.Cos(transform.eulerAngles.x * Mathf.Deg2Rad);
         accel = accel > 0f ? accel : 0f;
-        gripZ = gripZ * Mathf.Cos(transform.localEulerAngles.x * Mathf.Deg2Rad);
+        gripZ = gripZ * Mathf.Cos(transform.eulerAngles.x * Mathf.Deg2Rad);
         gripZ = gripZ > 0f ? gripZ : 0f;
-        gripX = gripX * Mathf.Cos(transform.localEulerAngles.z * Mathf.Deg2Rad);
+        gripX = gripX * Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad);
         gripX = gripX > 0f ? gripX : 0f;
 
         // A short raycast to check below
-        isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 0.2f);
+        isGrounded = Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
         if (!isGrounded) {
             rotate = 0f;
             accel = 0f;
@@ -173,20 +180,6 @@ public class DriftController : MonoBehaviour {
 
 
 
-    float Angle2Points(Vector3 a, Vector3 b) {
-        //return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
-        return Mathf.Atan2(b.x - a.x, b.z - a.z) * Mathf.Rad2Deg;
-    }
-
-    float AngleOffset(float raw, float offset) {
-        raw = (raw + offset) % 360;             // Mod by 360, to not exceed 360
-        if (raw > 180.0f) raw -= 360.0f;
-        if (raw < -180.0f) raw += 360.0f;
-        return raw;
-    }
-
-
-
     // Get input values from keyboard
     void InputKeyboard() {
         inThrottle = Input.GetAxisRaw("Throttle");
@@ -211,7 +204,11 @@ public class DriftController : MonoBehaviour {
 
         Vector3 rot = transform.eulerAngles;
         float delta = Mathf.DeltaAngle(rot.y, angle);
-        inTurn = delta > 0f ? 1f : -1f;
+        //inTurn = delta > 0f ? 1f : -1f;
+
+        if (delta > 10f) inTurn = 1f;
+        else if (delta < -10f) inTurn = -1f;
+        else inTurn = 0f;
 
         // TODO: Make functions below to be compatible with current system, only outputting "inTurn".
         //RotateInstant(angle);    // Rotation instant
@@ -323,4 +320,47 @@ public class DriftController : MonoBehaviour {
     }
     #endregion
 
+
+
+    #region Utilities
+    float Angle2Points(Vector3 a, Vector3 b) {
+        //return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
+        return Mathf.Atan2(b.x - a.x, b.z - a.z) * Mathf.Rad2Deg;
+    }
+
+    float AngleOffset(float raw, float offset) {
+        raw = (raw + offset) % 360;             // Mod by 360, to not exceed 360
+        if (raw > 180.0f) raw -= 360.0f;
+        if (raw < -180.0f) raw += 360.0f;
+        return raw;
+    }
+
+    // Get bound of a large 
+    public static Bounds GetBounds(GameObject obj) {
+
+        // Switch every collider to renderer for more accurate result
+        Bounds bounds = new Bounds();
+        Collider[] colliders = obj.GetComponentsInChildren<Collider>();
+
+        if (colliders.Length > 0) {
+
+            //Find first enabled renderer to start encapsulate from it
+            foreach (Collider collider in colliders) {
+
+                if (collider.enabled) {
+                    bounds = collider.bounds;
+                    break;
+                }
+            }
+
+            //Encapsulate (grow bounds to include another) for all collider
+            foreach (Collider collider in colliders) {
+                if (collider.enabled) {
+                    bounds.Encapsulate(collider.bounds);
+                }
+            }
+        }
+        return bounds;
+    }
+    #endregion
 }

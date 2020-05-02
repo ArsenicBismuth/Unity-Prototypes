@@ -4358,6 +4358,7 @@ MonoBehaviour:
   GripZ: 3
   Rotate: 270
   RotVel: 0.5
+  CoM: {x: 0, y: 1, z: 0}
   carFaction: 1
   Target: {fileID: 1594276974}
   turnTh: 20
@@ -4758,6 +4759,7 @@ MonoBehaviour:
   GripZ: 3
   Rotate: 270
   RotVel: 0.5
+  CoM: {x: 0, y: 1, z: 0}
   carFaction: 1
   Target: {fileID: 1594276974}
   turnTh: 20
@@ -9851,6 +9853,7 @@ MonoBehaviour:
   GripZ: 3
   Rotate: 270
   RotVel: 0.5
+  CoM: {x: 0, y: 1, z: 0}
   carFaction: 1
   Target: {fileID: 1594276974}
   turnTh: 20
@@ -11358,6 +11361,7 @@ MonoBehaviour:
   GripZ: 3
   Rotate: 270
   RotVel: 0.5
+  CoM: {x: 0, y: -0.8, z: 0}
   carFaction: 0
   Target: {fileID: 1379010994}
   turnTh: 20
@@ -11713,6 +11717,7 @@ MonoBehaviour:
   GripZ: 3
   Rotate: 270
   RotVel: 0.5
+  CoM: {x: 0, y: 1, z: 0}
   carFaction: 1
   Target: {fileID: 1594276974}
   turnTh: 20
@@ -11793,6 +11798,7 @@ MonoBehaviour:
   GripZ: 3
   Rotate: 270
   RotVel: 0.5
+  CoM: {x: 0, y: 1, z: 0}
   carFaction: 1
   Target: {fileID: 1594276974}
   turnTh: 20
@@ -13461,6 +13467,7 @@ MonoBehaviour:
   GripZ: 3
   Rotate: 270
   RotVel: 0.5
+  CoM: {x: 0, y: 1, z: 0}
   carFaction: 1
   Target: {fileID: 1594276974}
   turnTh: 20

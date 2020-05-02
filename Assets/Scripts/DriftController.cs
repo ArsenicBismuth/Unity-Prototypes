@@ -22,6 +22,11 @@ public class DriftController : MonoBehaviour {
     public float GripZ = 3.0f;          // In meters/second2
     public float Rotate = 270.0f;       // In degree/second
     public float RotVel = 0.5f;         // Ratio of forward velocity transfered on rotation
+
+    // Center of mass, fraction of collider boundaries (= half of size)
+    // 0 = center, and +/-1 = edge in the pos/neg direction.
+    public Vector3 CoM = new Vector3 (0f, .5f, 0f);
+                                                
     
     public Faction carFaction = Faction.Player;  // Drop-down to select faction of this object
     public Transform Target;            // Target for the AI to act upon
@@ -77,6 +82,9 @@ public class DriftController : MonoBehaviour {
         
         groupCollider = GetBounds(gameObject);     // Get the full collider boundary of group
         distToGround = groupCollider.extents.y;    // Pivot to the outermost collider
+
+        // Move the CoM to a fraction of colliders boundaries
+        rigidbody.centerOfMass = Vector3.Scale(groupCollider.extents, CoM);
 
         //distToGround = transform.position.y + 1f;
     }

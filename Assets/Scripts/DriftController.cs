@@ -16,12 +16,12 @@ public class DriftController : MonoBehaviour {
     #region Parameters
     public float Accel = 15.0f;         // In meters/second2
     public float Boost = 4f/3;          // In ratio
-    public float TopSpeed = 20.0f;      // In meters/second
+    public float TopSpeed = 30.0f;      // In meters/second
     public float Jump = 3.0f;           // In meters/second2
-    public float GripX = 6.0f;          // In meters/second2
+    public float GripX = 12.0f;          // In meters/second2
     public float GripZ = 3.0f;          // In meters/second2
-    public float Rotate = 270.0f;       // In degree/second
-    public float RotVel = 0.5f;         // Ratio of forward velocity transfered on rotation
+    public float Rotate = 190;       // In degree/second
+    public float RotVel = 0.8f;         // Ratio of forward velocity transfered on rotation
 
     // Center of mass, fraction of collider boundaries (= half of size)
     // 0 = center, and +/-1 = edge in the pos/neg direction.
@@ -36,8 +36,11 @@ public class DriftController : MonoBehaviour {
     float AngDragG = 5.0f;
     float AngDragA = 0.05f;
 
-    float MinRotSpd = 2f;          // Speed to start rotating
-    float MaxRotSpd = 6f;          // Speed to reach max rotation
+    // Rotational
+    float MinRotSpd = 2f;           // Forward velocity to start rotating
+    float MaxRotSpd = 6f;           // Forward velocity to reach max rotation
+    public float MinRotDrift = 2f;         // Sideways velocity to start rotating
+    public float MaxRotDrift = 6f;         // Sideways velocity to prevent rotation
 
     // AI-specific parameters
     [Header("AI Behaviors")]
@@ -45,7 +48,7 @@ public class DriftController : MonoBehaviour {
     #endregion
 
     #region Intermediate
-    Rigidbody rigidbody;
+    Rigidbody rigidBody;
     Bounds groupCollider;
     float distToGround;
 
@@ -54,11 +57,11 @@ public class DriftController : MonoBehaviour {
     float accel;
     float gripX;
     float gripZ;
+    float rotVel;
 
     // For determining drag direction
     float isRight = 1.0f;
     float isForward = 1.0f;
-    float speed = 0f;
 
     bool isRotating = false;
     bool isGrounded = true;
@@ -78,20 +81,20 @@ public class DriftController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		rigidbody = GetComponent<Rigidbody>();
+		rigidBody = GetComponent<Rigidbody>();
         
         groupCollider = GetBounds(gameObject);     // Get the full collider boundary of group
         distToGround = groupCollider.extents.y;    // Pivot to the outermost collider
 
         // Move the CoM to a fraction of colliders boundaries
-        rigidbody.centerOfMass = Vector3.Scale(groupCollider.extents, CoM);
+        rigidBody.centerOfMass = Vector3.Scale(groupCollider.extents, CoM);
 
         //distToGround = transform.position.y + 1f;
     }
 
     // Update is called once per frame
     void Update() {
-        Debug.DrawRay(transform.position, rigidbody.velocity / 2, Color.green);
+        Debug.DrawRay(transform.position, rigidBody.velocity / 2, Color.green);
     }
 
     // Update is called once multiple times per frame (according to physics setting)
@@ -101,7 +104,8 @@ public class DriftController : MonoBehaviour {
         rotate = Rotate;
         gripX = GripX;
         gripZ = GripZ;
-        rigidbody.angularDrag = AngDragG;
+        rotVel = RotVel;
+        rigidBody.angularDrag = AngDragG;
 
         // Adjustment in slope
         accel = accel * Mathf.Cos(transform.eulerAngles.x * Mathf.Deg2Rad);
@@ -118,33 +122,43 @@ public class DriftController : MonoBehaviour {
             accel = 0f;
             gripX = 0f;
             gripZ = 0f;
-            rigidbody.angularDrag = AngDragA;
+            rigidBody.angularDrag = AngDragA;
         }
 
         // Prevent the rotational input intervenes with physics angular velocity 
-        isStumbling = rigidbody.angularVelocity.magnitude > 0.1f * Rotate * Time.deltaTime;
+        isStumbling = rigidBody.angularVelocity.magnitude > 0.1f * Rotate * Time.deltaTime;
         if (isStumbling) {
             //rotate = 0f;
         }
 
-        // Adjustment of angular velocity to speed magnitude
-        if (speed < MinRotSpd) {
+        // Start turning only if there's forward velocity
+        if (Mathf.Abs(pvel.z) < MinRotSpd) {
             rotate = 0f;
         } else {
-            rotate = speed / MaxRotSpd * rotate;
-            if (rotate > Rotate) rotate = Rotate;
+            rotate = Mathf.Abs(pvel.z) / MaxRotSpd * rotate;
         }
+
+        // Prevent extreme rotation while drifting (side velocity high)
+        if (Mathf.Abs(pvel.x) > MaxRotDrift) {
+            rotVel *= 0.5f;
+            rotate *= 0.5f;
+        } else {
+            //rotVel = RotVel * 0.5f + 0.5f * rotVel * (1f - Mathf.Abs(pvel.x) / MaxRotDrift);
+            //rotate = rotate * 2 * (1f - Mathf.Abs(pvel.x) / MaxRotDrift);
+        }
+
+        if (rotate > Rotate) rotate = Rotate;
 
         //anim.SetBool("isMoving", isMoving);
         #endregion
 
         // Get command from keyboard or simple AI (conditional rulesets)
-        switch(carFaction) {
+        switch (carFaction) {
             case Faction.Player:
                 InputKeyboard();
                 break;
             case Faction.Enemy:
-                InputAI();
+                //InputAI();
                 break;
             default:
                 // Do nothing
@@ -152,19 +166,29 @@ public class DriftController : MonoBehaviour {
         }
 
         // Execute the commands
-        Controller();
+        Controller();   // pvel assigment in here
 
 
         #region Passives
         // Get the local-axis velocity after rotation
-        vel = transform.InverseTransformDirection(rigidbody.velocity);
+        vel = transform.InverseTransformDirection(rigidBody.velocity);
 
         // Rotate the velocity vector
         // TODO: Tweak more, still feels strange
         //vel = pvel;                   // Transfer all
         if (isRotating) {
-            vel = vel * (1 - RotVel) + pvel * RotVel; // Partial transfer
-            vel = vel.normalized * speed;
+            vel = vel * (1 - rotVel) + pvel * rotVel; // Partial transfer
+            //vel = vel.normalized * speed;
+        }
+        /* Should be:
+         * 1. Moving fast       : local forward, world forward.
+         * 2. Swerve left       : instantly rotate left, local sideways, world forward.
+         * 3. Wheels turn a little : small adjustments to the drifting arc.
+         * 3. Wheels turn right : everything the same, traction still gone.
+         * 4. Slowing down      : instantly rotate right, local forward, world left.
+         */
+        if (isRotating) {
+
         }
 
         // Sideway grip
@@ -181,8 +205,32 @@ public class DriftController : MonoBehaviour {
         if (vel.z > TopSpeed) vel.z = TopSpeed;
         else if (vel.z < -TopSpeed) vel.z = -TopSpeed;
 
-        rigidbody.velocity = transform.TransformDirection(vel);
+        rigidBody.velocity = transform.TransformDirection(vel);
         #endregion
+
+        //// Top speed
+        //if (vel.z > TopSpeed) vel.z = TopSpeed;
+        //else if (vel.z < -TopSpeed) vel.z = -TopSpeed;
+        //#endregion
+
+        //#region Passive forces (force)
+        //Vector3 grip = new Vector3(0f, 0f, 0f);
+
+        //// Every force is multiplied by mass to induce pure acceleration
+        //isRight = vel.x > 0f ? 1f : -1f;
+        //grip.x -= isRight * gripX * mass;       // Accelerate in opposing direction
+        //if (vel.x * isRight < 0f) vel.x = 0f;  // Check if changed polarity
+
+        //// Straight grip
+        //isForward = vel.z > 0f ? 1f : -1f;
+        //grip.z -= isForward * gripZ * mass;
+        //if (vel.z * isForward < 0f) vel.z = 0f;
+
+        //// Implement force with location at the bottom of the car
+        //rigidBody.AddForceAtPosition(grip, transform.position - transform.up * distToGround);
+
+        //rigidBody.velocity = transform.TransformDirection(vel);
+        //#endregion
 
     }
 
@@ -230,7 +278,7 @@ public class DriftController : MonoBehaviour {
         if (inBoost) accel *= Boost; // Higher acceleration
 
         if (inThrottle > 0.5f || inThrottle < -0.5f) {
-            rigidbody.velocity += transform.forward * inThrottle * accel * Time.deltaTime;
+            rigidBody.velocity += transform.forward * inThrottle * accel * Time.deltaTime;
             gripZ = 0f;     // Remove straight grip if wheel is rotating
         }
 
@@ -242,8 +290,7 @@ public class DriftController : MonoBehaviour {
         isRotating = false;
 
         // Get the local-axis velocity before new input (+x, +y, and +z = right, up, and forward)
-        pvel = transform.InverseTransformDirection(rigidbody.velocity);
-        speed = pvel.magnitude;
+        pvel = transform.InverseTransformDirection(rigidBody.velocity);
 
         // Turn statically
         if (inTurn > 0.5f || inTurn < -0.5f) {
@@ -300,7 +347,7 @@ public class DriftController : MonoBehaviour {
         // if you're not using eulerAngles.x & z.
         transform.eulerAngles = rot;
         //transform.rotation = Quaternion.AngleAxis(rot.y, Vector3.up);
-        //rigidbody.MoveRotation(Quaternion.Euler(rot));
+        //rigidBody.MoveRotation(Quaternion.Euler(rot));
     }
 
     void RotateGradRelative(float angle) {
@@ -321,10 +368,10 @@ public class DriftController : MonoBehaviour {
 
         // Add the drot to current rotation
         transform.rotation *= Quaternion.AngleAxis(drot.y, transform.up);
-        //rigidbody.rotation *= Quaternion.AngleAxis(drot.y, transform.up);
+        //rigidBody.rotation *= Quaternion.AngleAxis(drot.y, transform.up);
         //transform.Rotate(drot, Space.Self);
-        //rigidbody.AddTorque(drot);
-        //rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(drot));
+        //rigidBody.AddTorque(drot);
+        //rigidBody.MoveRotation(rigidBody.rotation * Quaternion.Euler(drot));
     }
     #endregion
 

@@ -17,7 +17,7 @@ public class DriftController : MonoBehaviour {
     public float Accel = 15.0f;         // In meters/second2
     public float Boost = 4f/3;          // In ratio
     public float TopSpeed = 30.0f;      // In meters/second
-    public float Jump = 3.0f;           // In meters/second2
+    //public float Jump = 3.0f;           // In meters/second2
     public float GripX = 12.0f;          // In meters/second2
     public float GripZ = 3.0f;          // In meters/second2
     public float Rotate = 190;       // In degree/second
@@ -39,8 +39,10 @@ public class DriftController : MonoBehaviour {
     // Rotational
     float MinRotSpd = 2f;           // Forward velocity to start rotating
     float MaxRotSpd = 6f;           // Forward velocity to reach max rotation
-    public float MinRotDrift = 2f;         // Sideways velocity to start rotating
-    public float MaxRotDrift = 6f;         // Sideways velocity to prevent rotation
+    public float MinRotDrift = 2f;  // Sideways velocity to start rotating
+    public float MaxRotDrift = 6f;  // Sideways velocity to prevent rotation
+    public AnimationCurve SlipU;  // Slip hysteresis static to full
+    public AnimationCurve SlipL;  // Slip hysteresis full to static
 
     // AI-specific parameters
     [Header("AI Behaviors")]
@@ -58,6 +60,7 @@ public class DriftController : MonoBehaviour {
     float gripX;
     float gripZ;
     float rotVel;
+    float grip;
 
     // For determining drag direction
     float isRight = 1.0f;
@@ -72,6 +75,8 @@ public class DriftController : MonoBehaviour {
     [HideInInspector] public float inTurn = 0f;
     bool inReset = false;
     bool inBoost = false;
+
+    Vector3 spawn = new Vector3(0f, 0f, 0f);
     
     Vector3 vel = new Vector3(0f, 0f, 0f);
     Vector3 pvel = new Vector3(0f, 0f, 0f);
@@ -82,6 +87,7 @@ public class DriftController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		rigidBody = GetComponent<Rigidbody>();
+        spawn = rigidBody.position;                // Store start location
         
         groupCollider = GetBounds(gameObject);     // Get the full collider boundary of group
         distToGround = groupCollider.extents.y;    // Pivot to the outermost collider
@@ -95,6 +101,12 @@ public class DriftController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         Debug.DrawRay(transform.position, rigidBody.velocity / 2, Color.green);
+
+        // Reset to spawn if out of bounds
+        if (transform.position.y < -10) {
+            transform.position = spawn;
+            inReset = true;
+        }
     }
 
     // Update is called once multiple times per frame (according to physics setting)
@@ -186,6 +198,8 @@ public class DriftController : MonoBehaviour {
          * 3. Wheels turn a little : small adjustments to the drifting arc.
          * 3. Wheels turn right : everything the same, traction still gone.
          * 4. Slowing down      : instantly rotate right, local forward, world left.
+         * 
+         * Update, solution: Hysteresis, gradual loss but snappy return.
          */
         if (isRotating) {
 
@@ -239,9 +253,11 @@ public class DriftController : MonoBehaviour {
     // Get input values from keyboard
     void InputKeyboard() {
         inThrottle = Input.GetAxisRaw("Throttle");
-        inReset = Input.GetKeyDown(KeyCode.R);
         inBoost = Input.GetAxisRaw("Boost") > 0f;
         inTurn = Input.GetAxisRaw("Sideways");
+
+        // Reset will turn false after the respawn is successful
+        inReset = inReset || Input.GetKeyDown(KeyCode.R);
     }
 
     void InputAI() {
@@ -285,6 +301,7 @@ public class DriftController : MonoBehaviour {
         if (inReset) {  // Reset
             transform.eulerAngles = new Vector3(0, 0, 0);
             transform.position += Vector3.up * 2;
+            inReset = false;
         }
         
         isRotating = false;
@@ -294,6 +311,7 @@ public class DriftController : MonoBehaviour {
 
         // Turn statically
         if (inTurn > 0.5f || inTurn < -0.5f) {
+            inTurn *= (pvel.z < 0) ? -1 : 1;    // To fix direction on reverse
             RotateGradConst(inTurn);
         }
     }

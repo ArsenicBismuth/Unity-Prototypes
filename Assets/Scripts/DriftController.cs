@@ -37,12 +37,12 @@ public class DriftController : MonoBehaviour {
     float AngDragA = 0.05f;
 
     // Rotational
-    float MinRotSpd = 2f;           // Forward velocity to start rotating
-    float MaxRotSpd = 6f;           // Forward velocity to reach max rotation
-    public float MinRotDrift = 2f;  // Sideways velocity to start rotating
-    public float MaxRotDrift = 6f;  // Sideways velocity to prevent rotation
-    public AnimationCurve SlipU;  // Slip hysteresis static to full
-    public AnimationCurve SlipL;  // Slip hysteresis full to static
+    float MinRotSpd = 1f;           // Velocity to start rotating
+    float MaxRotSpd = 4f;           // Velocity to reach max rotation
+    public AnimationCurve SlipL;    // Slip hysteresis static to full (x, input = speed)
+    public AnimationCurve SlipU;    // Slip hysteresis full to static (y, output = slip ratio)
+    public float SlipMod = 20f;     // Basically widens the slip curve
+                                    // (determine the min speed to reach max slip)
 
     // AI-specific parameters
     [Header("AI Behaviors")]
@@ -60,7 +60,7 @@ public class DriftController : MonoBehaviour {
     float gripX;
     float gripZ;
     float rotVel;
-    float grip;
+    float slip;     // The value used based on Slip curves
 
     // For determining drag direction
     float isRight = 1.0f;
@@ -75,6 +75,7 @@ public class DriftController : MonoBehaviour {
     [HideInInspector] public float inTurn = 0f;
     bool inReset = false;
     bool inBoost = false;
+    bool inSlip = false;
 
     Vector3 spawn = new Vector3(0f, 0f, 0f);
     
@@ -143,25 +144,42 @@ public class DriftController : MonoBehaviour {
             //rotate = 0f;
         }
 
-        // Start turning only if there's forward velocity
-        if (Mathf.Abs(pvel.z) < MinRotSpd) {
+        // Start turning only if there's velocity
+        if (pvel.magnitude < MinRotSpd) {
             rotate = 0f;
         } else {
-            rotate = Mathf.Abs(pvel.z) / MaxRotSpd * rotate;
-        }
-
-        // Prevent extreme rotation while drifting (side velocity high)
-        if (Mathf.Abs(pvel.x) > MaxRotDrift) {
-            rotVel *= 0.5f;
-            rotate *= 0.5f;
-        } else {
-            //rotVel = RotVel * 0.5f + 0.5f * rotVel * (1f - Mathf.Abs(pvel.x) / MaxRotDrift);
-            //rotate = rotate * 2 * (1f - Mathf.Abs(pvel.x) / MaxRotDrift);
+            rotate = pvel.magnitude / MaxRotSpd * rotate;
         }
 
         if (rotate > Rotate) rotate = Rotate;
 
-        //anim.SetBool("isMoving", isMoving);
+        // Calculate grip based on sideway velocity in hysteresis curve
+        if (!inSlip) {
+            // Normal => slip
+            slip = this.SlipL.Evaluate(Mathf.Abs(pvel.x)/SlipMod);
+            if (slip == 1f) inSlip = true;
+        } else {
+            // Slip => Normal
+            slip = this.SlipU.Evaluate(Mathf.Abs(pvel.x)/SlipMod);
+            if (slip == 0f) inSlip = false;
+        }
+
+        DebugPlayer(slip);
+
+        //rotate *= (1f + 0.5f * slip);   // Overall rotation, (body + vector)
+        rotate *= (1f - 0.3f * slip);   // Overall rotation, (body + vector)
+        rotVel *= (1f - slip);          // The vector modifier (just vector)
+        
+        /* Should be:
+         * 1. Moving fast       : local forward, world forward.
+         * 2. Swerve left       : instantly rotate left, local sideways, world forward.
+         * 3. Wheels turn a little : small adjustments to the drifting arc.
+         * 3. Wheels turn right : everything the same, traction still gone.
+         * 4. Slowing down      : instantly rotate right, local forward, world left.
+         * 
+         * Update, solution: Hysteresis, gradual loss but snappy return.
+         */
+
         #endregion
 
         // Get command from keyboard or simple AI (conditional rulesets)
@@ -186,23 +204,10 @@ public class DriftController : MonoBehaviour {
         vel = transform.InverseTransformDirection(rigidBody.velocity);
 
         // Rotate the velocity vector
-        // TODO: Tweak more, still feels strange
-        //vel = pvel;                   // Transfer all
+        // vel = pvel => Transfer all (full grip)
         if (isRotating) {
             vel = vel * (1 - rotVel) + pvel * rotVel; // Partial transfer
             //vel = vel.normalized * speed;
-        }
-        /* Should be:
-         * 1. Moving fast       : local forward, world forward.
-         * 2. Swerve left       : instantly rotate left, local sideways, world forward.
-         * 3. Wheels turn a little : small adjustments to the drifting arc.
-         * 3. Wheels turn right : everything the same, traction still gone.
-         * 4. Slowing down      : instantly rotate right, local forward, world left.
-         * 
-         * Update, solution: Hysteresis, gradual loss but snappy return.
-         */
-        if (isRotating) {
-
         }
 
         // Sideway grip
@@ -281,11 +286,6 @@ public class DriftController : MonoBehaviour {
         if (delta > 10f) inTurn = 1f;
         else if (delta < -10f) inTurn = -1f;
         else inTurn = 0f;
-
-        // TODO: Make functions below to be compatible with current system, only outputting "inTurn".
-        //RotateInstant(angle);    // Rotation instant
-        //RotateGradAbsolute(angle);   // Rotation gradual - Absolute target
-        //RotateGradRelative(angle);   // Rotation gradual - Relative target
     }
 
     // Executing the queued inputs
@@ -311,8 +311,8 @@ public class DriftController : MonoBehaviour {
 
         // Turn statically
         if (inTurn > 0.5f || inTurn < -0.5f) {
-            inTurn *= (pvel.z < 0) ? -1 : 1;    // To fix direction on reverse
-            RotateGradConst(inTurn);
+            float dir = (pvel.z < 0) ? -1 : 1;    // To fix direction on reverse
+            RotateGradConst(inTurn * dir);
         }
     }
 
@@ -396,6 +396,10 @@ public class DriftController : MonoBehaviour {
 
 
     #region Utilities
+    void DebugPlayer(object message) {
+        if (carFaction == Faction.Player) Debug.Log(message);
+    }
+
     float Angle2Points(Vector3 a, Vector3 b) {
         //return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
         return Mathf.Atan2(b.x - a.x, b.z - a.z) * Mathf.Rad2Deg;

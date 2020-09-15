@@ -74,10 +74,13 @@ public class DriftController : MonoBehaviour {
     float inThrottle = 0f;
     [HideInInspector] public float inTurn = 0f;
     bool inReset = false;
+    bool isStuck = false;
+    bool autoReset = false;
     bool inBoost = false;
     bool inSlip = false;
 
-    Vector3 spawn = new Vector3(0f, 0f, 0f);
+    Vector3 spawnP;
+    Quaternion spawnR;
     
     Vector3 vel = new Vector3(0f, 0f, 0f);
     Vector3 pvel = new Vector3(0f, 0f, 0f);
@@ -88,7 +91,10 @@ public class DriftController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		rigidBody = GetComponent<Rigidbody>();
-        spawn = rigidBody.position;                // Store start location
+
+        // Store start location & rotation
+        spawnP = transform.position;
+        spawnR = transform.rotation;
         
         groupCollider = GetBounds(gameObject);     // Get the full collider boundary of group
         distToGround = groupCollider.extents.y;    // Pivot to the outermost collider
@@ -102,10 +108,11 @@ public class DriftController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         Debug.DrawRay(transform.position, rigidBody.velocity / 2, Color.green);
-
+        
         // Reset to spawn if out of bounds
         if (transform.position.y < -10) {
-            transform.position = spawn;
+            transform.position = spawnP;
+            transform.rotation = spawnR;
             inReset = true;
         }
     }
@@ -188,7 +195,12 @@ public class DriftController : MonoBehaviour {
                 InputKeyboard();
                 break;
             case Faction.Enemy:
-                //InputAI();
+                InputEnemy();    // Chase player
+                autoReset = true;
+                break;
+            case Faction.Neutral:
+                inThrottle = 1f; // Just straight
+                autoReset = true;
                 break;
             default:
                 // Do nothing
@@ -265,7 +277,7 @@ public class DriftController : MonoBehaviour {
         inReset = inReset || Input.GetKeyDown(KeyCode.R);
     }
 
-    void InputAI() {
+    void InputEnemy() {
         inThrottle = 1f;
 
         // Turn by facing player
@@ -298,12 +310,24 @@ public class DriftController : MonoBehaviour {
             gripZ = 0f;     // Remove straight grip if wheel is rotating
         }
 
+        if (autoReset) {
+            // If stuck, check next frame too then reset
+            if (pvel.magnitude <= 0.01f) {
+                inReset = isStuck;  // So, true on next frame
+                isStuck = true;
+            } else {
+                isStuck = false;
+            }
+        }
+
         if (inReset) {  // Reset
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            float y = transform.eulerAngles.y;
+            transform.eulerAngles = new Vector3(0, y, 0);
+            rigidBody.velocity = new Vector3(0, -1f, 0);
             transform.position += Vector3.up * 2;
             inReset = false;
         }
-        
+
         isRotating = false;
 
         // Get the local-axis velocity before new input (+x, +y, and +z = right, up, and forward)

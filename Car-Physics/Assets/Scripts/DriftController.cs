@@ -9,8 +9,6 @@ public enum Faction {
     Neutral
 };
 
-
-
 public class DriftController : MonoBehaviour {
 
     #region Parameters
@@ -105,7 +103,7 @@ public class DriftController : MonoBehaviour {
         //distToGround = transform.position.y + 1f;
     }
 
-    // Update is called once per frame
+    // Called once per frame
     void Update() {
         Debug.DrawRay(transform.position, rigidBody.velocity / 2, Color.green);
         
@@ -117,9 +115,10 @@ public class DriftController : MonoBehaviour {
         }
     }
 
-    // Update is called once multiple times per frame (according to physics setting)
+    // Called once multiple times per frame 
+    // (according to physics setting)
     void FixedUpdate() {
-        #region Situational Check
+        #region Situational Checks
         accel = Accel;
         rotate = Rotate;
         gripX = GripX;
@@ -176,7 +175,7 @@ public class DriftController : MonoBehaviour {
         //rotate *= (1f + 0.5f * slip);   // Overall rotation, (body + vector)
         rotate *= (1f - 0.3f * slip);   // Overall rotation, (body + vector)
         rotVel *= (1f - slip);          // The vector modifier (just vector)
-        
+
         /* Should be:
          * 1. Moving fast       : local forward, world forward.
          * 2. Swerve left       : instantly rotate left, local sideways, world forward.
@@ -189,6 +188,7 @@ public class DriftController : MonoBehaviour {
 
         #endregion
 
+        #region Logics
         // Get command from keyboard or simple AI (conditional rulesets)
         switch (carFaction) {
             case Faction.Player:
@@ -209,7 +209,7 @@ public class DriftController : MonoBehaviour {
 
         // Execute the commands
         Controller();   // pvel assigment in here
-
+        #endregion
 
         #region Passives
         // Get the local-axis velocity after rotation
@@ -224,7 +224,7 @@ public class DriftController : MonoBehaviour {
 
         // Sideway grip
         isRight = vel.x > 0f ? 1f : -1f;
-        vel.x -= isRight * gripX * Time.deltaTime;   // Accelerate in opposing direction
+        vel.x -= isRight * gripX * Time.deltaTime;  // Accelerate in opposing direction
         if (vel.x * isRight < 0f) vel.x = 0f;       // Check if changed polarity
 
         // Straight grip
@@ -239,34 +239,11 @@ public class DriftController : MonoBehaviour {
         rigidBody.velocity = transform.TransformDirection(vel);
         #endregion
 
-        //// Top speed
-        //if (vel.z > TopSpeed) vel.z = TopSpeed;
-        //else if (vel.z < -TopSpeed) vel.z = -TopSpeed;
-        //#endregion
-
-        //#region Passive forces (force)
-        //Vector3 grip = new Vector3(0f, 0f, 0f);
-
-        //// Every force is multiplied by mass to induce pure acceleration
-        //isRight = vel.x > 0f ? 1f : -1f;
-        //grip.x -= isRight * gripX * mass;       // Accelerate in opposing direction
-        //if (vel.x * isRight < 0f) vel.x = 0f;  // Check if changed polarity
-
-        //// Straight grip
-        //isForward = vel.z > 0f ? 1f : -1f;
-        //grip.z -= isForward * gripZ * mass;
-        //if (vel.z * isForward < 0f) vel.z = 0f;
-
-        //// Implement force with location at the bottom of the car
-        //rigidBody.AddForceAtPosition(grip, transform.position - transform.up * distToGround);
-
-        //rigidBody.velocity = transform.TransformDirection(vel);
-        //#endregion
-
     }
 
 
 
+    #region Controllers
     // Get input values from keyboard
     void InputKeyboard() {
         inThrottle = Input.GetAxisRaw("Throttle");
@@ -279,13 +256,6 @@ public class DriftController : MonoBehaviour {
 
     void InputEnemy() {
         inThrottle = 1f;
-
-        // Turn by facing player
-        // Get the Screen positions of the this object & player
-        //Vector2 thisOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-        //Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        //Vector2 targetOnScreen = Camera.main.WorldToViewportPoint(Target.position);
-        //float angle = -AngleOffset(Angle2Points(thisOnScreen, targetOnScreen), -90.0f);
 
         // Turn by facing player
         // Get the angle between the points (absolute goal) = right (target) - left
@@ -339,10 +309,11 @@ public class DriftController : MonoBehaviour {
             RotateGradConst(inTurn * dir);
         }
     }
+    #endregion
 
 
 
-    #region Rotation methods
+    #region Rotation Methods
     /* Advised to not read eulerAngles, only write: https://answers.unity.com/questions/462073/
      * As it turns out, the problem isn't there. */
 

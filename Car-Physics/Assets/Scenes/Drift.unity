@@ -76078,7 +76078,7 @@ MonoBehaviour:
   GripZ: 3
   Rotate: 140
   RotVel: 0.7
-  CoM: {x: 0, y: 0.3, z: 0.1}
+  CoM: {x: 0, y: 0.3, z: 0}
   carFaction: 0
   Target: {fileID: 1379010994}
   SlipL:

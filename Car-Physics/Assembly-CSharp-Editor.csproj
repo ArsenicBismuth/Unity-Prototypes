@@ -72,8 +72,20 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Barracuda.MacBLAS">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Barracuda.MacBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.Editor">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Barracuda.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Editor">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Burst.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
@@ -84,23 +96,50 @@
     <Reference Include="Unity.Timeline">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Barracuda">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Barracuda.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Postprocessing.Editor">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Barracuda.iOSBLAS">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Barracuda.iOSBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ML-Agents.CommunicatorObjects">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.ML-Agents.CommunicatorObjects.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.BurstBLAS">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Barracuda.BurstBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ML-Agents.Editor">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.ML-Agents.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ML-Agents">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.ML-Agents.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.ONNX">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/ScriptAssemblies/Unity.Barracuda.ONNX.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>D:/Program Files/Unity/2019.3.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -293,6 +332,24 @@
     </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/PackageCache/com.unity.barracuda@1.1.1-preview/Barracuda/Runtime/Plugins/ProtoBuffer/Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/PackageCache/com.unity.burst@1.3.4/Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Abstractions">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/PackageCache/com.unity.ml-agents@1.4.0-preview/Plugins/System.IO.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Abstractions.TestingHelpers">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/PackageCache/com.unity.ml-agents@1.4.0-preview/Plugins/System.IO.Abstractions.TestingHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Grpc.Core">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/PackageCache/com.unity.ml-agents@1.4.0-preview/Plugins/ProtoBuffer/Grpc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive.Async">
+      <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/PackageCache/com.unity.ml-agents@1.4.0-preview/Plugins/ProtoBuffer/System.Interactive.Async.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>D:/Ezeuz/Workbench/Unity/Prototypes/Car-Physics/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>

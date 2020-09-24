@@ -12,7 +12,7 @@ public class Wheel : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         // Get car
-        thisCar = transform.parent.GetComponent<DriftController>();
+        thisCar = transform.parent.parent.GetComponent<DriftController>();
         initRotation = transform.localEulerAngles;  // Rotation relative to parent (car)
     }
 

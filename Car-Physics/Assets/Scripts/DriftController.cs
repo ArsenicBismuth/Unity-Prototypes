@@ -6,7 +6,8 @@ using UnityEngine;
 public enum Faction {
     Player,
     Enemy,
-    Neutral
+    Neutral,
+    None
 };
 
 public class DriftController : MonoBehaviour {
@@ -69,7 +70,7 @@ public class DriftController : MonoBehaviour {
     bool isStumbling = false;
 
     // Control signals
-    float inThrottle = 0f;
+    [HideInInspector] public float inThrottle = 0f;
     [HideInInspector] public float inTurn = 0f;
     bool inReset = false;
     bool isStuck = false;
@@ -82,6 +83,7 @@ public class DriftController : MonoBehaviour {
     
     Vector3 vel = new Vector3(0f, 0f, 0f);
     Vector3 pvel = new Vector3(0f, 0f, 0f);
+    public float speed = 0;
     #endregion
 
 
@@ -109,9 +111,7 @@ public class DriftController : MonoBehaviour {
         
         // Reset to spawn if out of bounds
         if (transform.position.y < -10) {
-            transform.position = spawnP;
-            transform.rotation = spawnR;
-            inReset = true;
+            FullReset();
         }
     }
 
@@ -151,10 +151,10 @@ public class DriftController : MonoBehaviour {
         }
 
         // Start turning only if there's velocity
-        if (pvel.magnitude < MinRotSpd) {
+        if (speed < MinRotSpd) {
             rotate = 0f;
         } else {
-            rotate = pvel.magnitude / MaxRotSpd * rotate;
+            rotate = speed / MaxRotSpd * rotate;
         }
 
         if (rotate > Rotate) rotate = Rotate;
@@ -170,7 +170,7 @@ public class DriftController : MonoBehaviour {
             if (slip == 0f) inSlip = false;
         }
 
-        DebugPlayer(slip);
+        //DebugPlayer(slip);
 
         //rotate *= (1f + 0.5f * slip);   // Overall rotation, (body + vector)
         rotate *= (1f - 0.3f * slip);   // Overall rotation, (body + vector)
@@ -202,6 +202,7 @@ public class DriftController : MonoBehaviour {
                 inThrottle = 1f; // Just straight
                 autoReset = true;
                 break;
+            case Faction.None:
             default:
                 // Do nothing
                 break;
@@ -282,7 +283,7 @@ public class DriftController : MonoBehaviour {
 
         if (autoReset) {
             // If stuck, check next frame too then reset
-            if (pvel.magnitude <= 0.01f) {
+            if (speed <= 0.01f) {
                 inReset = isStuck;  // So, true on next frame
                 isStuck = true;
             } else {
@@ -293,8 +294,8 @@ public class DriftController : MonoBehaviour {
         if (inReset) {  // Reset
             float y = transform.eulerAngles.y;
             transform.eulerAngles = new Vector3(0, y, 0);
-            rigidBody.velocity = new Vector3(0, -1f, 0);
-            transform.position += Vector3.up * 2;
+            rigidBody.velocity = new Vector3(0, 0, 0);
+            //transform.position += Vector3.up * 2;
             inReset = false;
         }
 
@@ -302,12 +303,20 @@ public class DriftController : MonoBehaviour {
 
         // Get the local-axis velocity before new input (+x, +y, and +z = right, up, and forward)
         pvel = transform.InverseTransformDirection(rigidBody.velocity);
+        speed = pvel.magnitude;
 
         // Turn statically
         if (inTurn > 0.5f || inTurn < -0.5f) {
             float dir = (pvel.z < 0) ? -1 : 1;    // To fix direction on reverse
             RotateGradConst(inTurn * dir);
         }
+    }
+
+    // Reset position to spawn
+    public void FullReset() {
+        transform.position = spawnP;
+        transform.rotation = spawnR;
+        inReset = true;
     }
     #endregion
 

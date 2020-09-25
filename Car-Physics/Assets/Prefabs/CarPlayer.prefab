@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 5824933641669792945}
   - component: {fileID: 5470054351268840805}
   - component: {fileID: 4366348370397464412}
+  - component: {fileID: 2464255588343057371}
   m_Layer: 9
   m_Name: CarPlayer
   m_TagString: Untagged
@@ -199,7 +200,7 @@ MonoBehaviour:
     VectorActionSize: 02000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 6eab9e21f5b57594c97f742e9c1c0c76, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: Car
@@ -223,6 +224,7 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 2000
+  carChecks: {fileID: 2464255588343057371}
   raycastLayers:
     serializedVersion: 2
     m_Bits: 3072
@@ -240,7 +242,67 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  rewardOnCheckpoint: 1
+  checkpointReward: 1
+  speedReward: 0.001
+--- !u!114 &2464255588343057371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5824933641669792944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 517ee83f6621c4b48839b7fa27f1e79f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  check: 0
+  lap: 0
+  threshold: 4
+  checkReach:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4366348370397464412}
+        m_MethodName: OnReachCheckpoint
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5824933641671793819
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ using Unity.MLAgents.Sensors;
 public class CarAgent : Agent
 {
 
+    public CarChecks carChecks;
     DriftController car;
 
     // LayerMask is a bitwise bools: 01010100, each represent a layer.
@@ -23,7 +24,8 @@ public class CarAgent : Agent
     float throttle;
     float turn;
 
-    public float rewardOnCheckpoint = 1;
+    public float checkpointReward = 1;
+    public float speedReward = .001f;
 
     Vector3 startingPos;
     Quaternion startingRot;
@@ -48,12 +50,12 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin() {
         base.OnEpisodeBegin();
         car.FullReset();
-        //trackManager.RestartRace();
+        carChecks.Restart();
     }
 
-    //public void OnReachCheckpoint(Checkpoint checkpoint) {
-    //    this.AddReward(rewardOnCheckpoint);
-    //}
+    public void OnReachCheckpoint() {
+        this.AddReward(checkpointReward);
+    }
 
     public override void OnActionReceived(float[] vectorAction) {
         base.OnActionReceived(vectorAction);
@@ -64,7 +66,7 @@ public class CarAgent : Agent
         car.inThrottle = throttle;
         car.inTurn = turn;
 
-        AddReward(car.speed * .01f);
+        AddReward(car.speed * speedReward);
     }
 
     public override void CollectObservations(VectorSensor sensor) {

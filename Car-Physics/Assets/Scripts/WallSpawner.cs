@@ -18,8 +18,6 @@ public class WallSpawner : MonoBehaviour
         wall = wallObj.transform.localScale;
         track = transform.localScale;
 
-        Debug.Log(track.x);
-
         // Spawn walls in all four sides of the track
         // Rotate so that the walls are facing inside (x touches track)
         // Top = Front = Z+ track

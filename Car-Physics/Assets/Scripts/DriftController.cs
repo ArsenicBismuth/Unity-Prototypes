@@ -293,6 +293,7 @@ public class DriftController : MonoBehaviour {
 
         if (inReset) {  // Reset
             float y = transform.eulerAngles.y;
+            rigidBody.angularVelocity = new Vector3(0, 0, 0);
             transform.eulerAngles = new Vector3(0, y, 0);
             rigidBody.velocity = new Vector3(0, 0, 0);
             //transform.position += Vector3.up * 2;

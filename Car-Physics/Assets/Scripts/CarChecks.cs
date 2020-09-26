@@ -13,6 +13,13 @@ public class CarChecks : MonoBehaviour
     public UnityEvent checkReach;
 
     float mindist = 99;
+    int start;
+
+    void Start()
+    {
+        // Set the starting point
+        start = check;
+    }
 
     // Update is called once per frame
     void Update()
@@ -40,7 +47,7 @@ public class CarChecks : MonoBehaviour
     }
 
     public void Restart() {
-        check = 0;
+        check = start;
         lap = 0;
     }
 }

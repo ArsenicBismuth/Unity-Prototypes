@@ -182,6 +182,7 @@ MonoBehaviour:
   inThrottle: 0
   inTurn: 0
   speed: 0
+  angle: 0
 --- !u!114 &5470054351268840805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,12 +196,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 10
+    VectorObservationSize: 11
     NumStackedVectorObservations: 1
     VectorActionSize: 02000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: 6eab9e21f5b57594c97f742e9c1c0c76, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 5695c9552c1cf3449baecfe98c0396a5, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: Car
@@ -242,8 +243,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  checkpointReward: 1
-  speedReward: 0.001
+  checkpointReward: 3
+  speedReward: 0.002
+  angleReward: 0.02
+  reward: 0
 --- !u!114 &2464255588343057371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,9 +289,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  check: 0
+  check: 15
   lap: 0
   threshold: 4
+  inverted: 0
   checkReach:
     m_PersistentCalls:
       m_Calls:

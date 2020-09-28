@@ -84,6 +84,7 @@ public class DriftController : MonoBehaviour {
     Vector3 vel = new Vector3(0f, 0f, 0f);
     Vector3 pvel = new Vector3(0f, 0f, 0f);
     public float speed = 0;
+    public float angle = 0;
     #endregion
 
 
@@ -237,7 +238,9 @@ public class DriftController : MonoBehaviour {
         if (vel.z > TopSpeed) vel.z = TopSpeed;
         else if (vel.z < -TopSpeed) vel.z = -TopSpeed;
 
-        rigidBody.velocity = transform.TransformDirection(vel);
+        // Get vector-body diff for training
+        angle = Angle2Points(Vector3.zero, vel);    // Remember, Vel is local, so only vs zeros
+        rigidBody.velocity = transform.TransformDirection(vel); // Then covert to world for translation
         #endregion
 
     }
@@ -404,7 +407,7 @@ public class DriftController : MonoBehaviour {
     void DebugPlayer(object message) {
         if (carFaction == Faction.Player) Debug.Log(message);
     }
-
+    
     float Angle2Points(Vector3 a, Vector3 b) {
         //return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
         return Mathf.Atan2(b.x - a.x, b.z - a.z) * Mathf.Rad2Deg;

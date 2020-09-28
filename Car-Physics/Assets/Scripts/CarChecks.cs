@@ -8,17 +8,20 @@ public class CarChecks : MonoBehaviour
     public List<Transform> checkpoints = new List<Transform>();
     public int check = 0;   // Current checkpoint
     public int lap = 0;     // Current lap
-    public float threshold = 4f; // Minimum distance to be counted
+    public float threshold = 4f;  // Minimum distance to be counted
+    public bool inverted = false; // Inverted track
     
     public UnityEvent checkReach;
 
     float mindist = 99;
     int start;
+    int inv = 1;
 
     void Start()
     {
         // Set the starting point
         start = check;
+        if (inverted) inv = -1;
     }
 
     // Update is called once per frame
@@ -35,11 +38,10 @@ public class CarChecks : MonoBehaviour
         if (dist < threshold) {
             // Call that event
             checkReach.Invoke();
-            check += 1;
-            if (check >= checkpoints.Count) {
-                check = 0;
-                lap += 1;
-            }
+            check += inv;
+            if (!inverted && check == checkpoints.Count) check = 0;
+            if (inverted && check == 0) check = checkpoints.Count-1;
+            if (check == start) lap += 1;
 
             mindist = 99;
         }

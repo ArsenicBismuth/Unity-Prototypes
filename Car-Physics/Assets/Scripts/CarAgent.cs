@@ -26,6 +26,9 @@ public class CarAgent : Agent
 
     public float checkpointReward = 1;
     public float speedReward = .001f;
+    public float angleReward = .1f;
+
+    public float reward;
 
     Vector3 startingPos;
     Quaternion startingRot;
@@ -59,14 +62,26 @@ public class CarAgent : Agent
 
     public override void OnActionReceived(float[] vectorAction) {
         base.OnActionReceived(vectorAction);
+        float angle = Mathf.Abs(car.angle);
+
         throttle = vectorAction[0];
         if (throttle > 0) throttle = 1;
+        if (throttle < 0) throttle = -1;
         turn = vectorAction[1];
 
         car.inThrottle = throttle;
         car.inTurn = turn;
 
         AddReward(car.speed * speedReward);
+
+        // Reward drifting, but punish reversing. Minimum speed to ignore small movements.
+        if (car.speed > 3f) {
+            if (angle < 120) AddReward(angle * angleReward);
+            else AddReward((120 - angle) * angleReward);
+        }
+
+        // Check reward
+        reward = GetCumulativeReward();
     }
 
     public override void CollectObservations(VectorSensor sensor) {
@@ -76,6 +91,8 @@ public class CarAgent : Agent
         for (int i = 0; i < raycasts.Length; i++) {
             AddRaycastVectorObs(sensor, raycasts[i]);
         }
+
+        sensor.AddObservation(car.angle);
     }
 
     void AddRaycastVectorObs(VectorSensor sensor, Transform ray) {
@@ -103,6 +120,8 @@ public class CarAgent : Agent
         // Example, hit barrier that's included in the off-track list
         // Or fall sideways into the off-side track
         if (distance < hitDist) {
+            AddReward(-10 * car.speed * speedReward);
+
             this.EndEpisode();
             this.OnEpisodeBegin();
         }

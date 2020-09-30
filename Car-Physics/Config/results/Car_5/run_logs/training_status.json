@@ -6,13 +6,31 @@
                 "file_path": "results\\Car_5\\Car\\Car-433794.nn",
                 "reward": null,
                 "creation_time": 1601295002.0464728
+            },
+            {
+                "steps": 499944,
+                "file_path": "results\\Car_5\\Car\\Car-499944.nn",
+                "reward": 134.18448795991785,
+                "creation_time": 1601318822.8018582
+            },
+            {
+                "steps": 999963,
+                "file_path": "results\\Car_5\\Car\\Car-999963.nn",
+                "reward": 220.85521094004312,
+                "creation_time": 1601320100.5416417
+            },
+            {
+                "steps": 1099445,
+                "file_path": "results\\Car_5\\Car\\Car-1099445.nn",
+                "reward": 228.22778480931333,
+                "creation_time": 1601320338.9299722
             }
         ],
         "final_checkpoint": {
-            "steps": 433794,
+            "steps": 1099445,
             "file_path": "results\\Car_5\\Car.nn",
-            "reward": null,
-            "creation_time": 1601295002.0464728
+            "reward": 228.22778480931333,
+            "creation_time": 1601320338.9299722
         }
     },
     "metadata": {

@@ -12,6 +12,7 @@ public class CarChecks : MonoBehaviour
     public bool inverted = false; // Inverted track
     
     public UnityEvent checkReach;
+    public UnityEvent lapReach;
 
     float mindist = 99;
     int start;
@@ -41,7 +42,10 @@ public class CarChecks : MonoBehaviour
             check += inv;
             if (!inverted && check == checkpoints.Count) check = 0;
             if (inverted && check == 0) check = checkpoints.Count-1;
-            if (check == start) lap += 1;
+            if (check == start) {
+                lap += 1;
+                lapReach.Invoke();
+            }
 
             mindist = 99;
         }

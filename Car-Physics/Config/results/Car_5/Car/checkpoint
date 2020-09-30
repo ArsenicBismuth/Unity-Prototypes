@@ -1,2 +1,4 @@
-model_checkpoint_path: "Car-433794.ckpt"
-all_model_checkpoint_paths: "Car-433794.ckpt"
+model_checkpoint_path: "Car-1099445.ckpt"
+all_model_checkpoint_paths: "Car-499944.ckpt"
+all_model_checkpoint_paths: "Car-999963.ckpt"
+all_model_checkpoint_paths: "Car-1099445.ckpt"

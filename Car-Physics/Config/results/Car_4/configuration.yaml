@@ -39,7 +39,7 @@ env_settings:
   seed: -1
 engine_settings:
   width: 512
-  height: 512
+  height: 256
   quality_level: 0
   time_scale: 20.0
   target_frame_rate: -1
@@ -50,7 +50,7 @@ checkpoint_settings:
   run_id: Car_4
   initialize_from: null
   load_model: false
-  resume: false
+  resume: true
   force: false
   train_model: false
   inference: false

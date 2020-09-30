@@ -35178,11 +35178,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarPlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 5824933641669792945, guid: 567b6e5c86039f24f98d8d7e56b7f2c1,
-        type: 3}
-      propertyPath: carFaction
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5824933641669792947, guid: 567b6e5c86039f24f98d8d7e56b7f2c1,
         type: 3}
       propertyPath: m_LocalPosition.x

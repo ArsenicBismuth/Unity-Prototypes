@@ -83,8 +83,11 @@ public class DriftController : MonoBehaviour {
     
     Vector3 vel = new Vector3(0f, 0f, 0f);
     Vector3 pvel = new Vector3(0f, 0f, 0f);
+
+    [Header("Info")]
     public float speed = 0;
     public float angle = 0;
+    public float slips = 0;
     #endregion
 
 
@@ -170,6 +173,7 @@ public class DriftController : MonoBehaviour {
             slip = this.SlipU.Evaluate(Mathf.Abs(pvel.x)/SlipMod);
             if (slip == 0f) inSlip = false;
         }
+        slips = slip;
 
         //DebugPlayer(slip);
 

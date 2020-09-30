@@ -12,7 +12,6 @@ public class CarAgent : Agent
 
     // LayerMask is a bitwise bools: 01010100, each represent a layer.
     public LayerMask raycastLayers;     // Layers to be included in raycast
-    //public LayerMask outLayers;       // Off-track layers
 
     public int decisionInt = 5;         // Request a decision every X steps.
 
@@ -24,6 +23,7 @@ public class CarAgent : Agent
     float throttle;
     float turn;
 
+    public bool singleLap = false;
     public float checkpointReward = 1;
     public float speedReward = .001f;
     public float angleReward = .1f;
@@ -60,6 +60,13 @@ public class CarAgent : Agent
         this.AddReward(checkpointReward);
     }
 
+    public void OnLap() {
+        if (singleLap) {
+            this.EndEpisode();
+            this.OnEpisodeBegin(); ;
+        }
+    }
+
     public override void OnActionReceived(float[] vectorAction) {
         base.OnActionReceived(vectorAction);
         float angle = Mathf.Abs(car.angle);
@@ -76,8 +83,8 @@ public class CarAgent : Agent
 
         // Reward drifting, but punish reversing. Minimum speed to ignore small movements.
         if (car.speed > 3f) {
-            if (angle < 120) AddReward(angle * angleReward);
-            else AddReward((120 - angle) * angleReward);
+            if (angle > 10 && angle < 120) AddReward(angle * angleReward);
+            else if (angle >= 120) AddReward((120 - angle) * angleReward);
         }
 
         // Check reward
@@ -93,6 +100,7 @@ public class CarAgent : Agent
         }
 
         sensor.AddObservation(car.angle);
+        sensor.AddObservation(car.slips);
     }
 
     void AddRaycastVectorObs(VectorSensor sensor, Transform ray) {
@@ -100,26 +108,17 @@ public class CarAgent : Agent
         RaycastHit hitInfo = new RaycastHit();
         var hit = Physics.Raycast(ray.position, ray.forward, out hitInfo, raycastDistance, raycastLayers.value, QueryTriggerInteraction.Ignore);
 
-        //int layer = 0;
-        //if (hit)
-        //    layer = hitInfo.transform.gameObject.layer;
-
         // This is valid only if it directly hit off-track object
         var distance = hitInfo.distance;
-
-        //// If it hit layer other than the off-track layermask list
-        //if (!(outLayers == (outLayers | (1 << layer)))) {
-        //    // As if it doesn't hit anything
-        //    distance = raycastDistance;
-        //}
 
         if (!hit) distance = raycastDistance;
         var obs = distance / raycastDistance;
         sensor.AddObservation(obs);
 
-        // Example, hit barrier that's included in the off-track list
-        // Or fall sideways into the off-side track
+        // If hit wall
         if (distance < hitDist) {
+            // Discourage high speed near the wall
+            // Facilitate finding new path
             AddReward(-10 * car.speed * speedReward);
 
             this.EndEpisode();

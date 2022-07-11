@@ -1,3 +1,5 @@
+https://user-images.githubusercontent.com/19264532/178376623-4eb603ab-41e5-4f11-bfab-e3a2a3de6c87.mp4
+
 # Simple Bronchoscopy Simulation
 Simple simulation for bronchoscopy, with basic features:
 

@@ -1,2 +1,6 @@
 
 *.lnk
+*/Library/
+*/Temp/
+*/Logs/
+*/Build/

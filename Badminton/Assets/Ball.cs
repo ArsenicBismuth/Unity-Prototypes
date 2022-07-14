@@ -6,6 +6,7 @@ public class Ball : MonoBehaviour
 {
     
     public Master master;
+    public GameObject contact;
     public static float terminal = 6.7f; // Terminal velocity, 6.51 to 6.87 m/s
     private float vtr = terminal;
     private float vt = terminal*terminal;
@@ -34,11 +35,18 @@ public class Ball : MonoBehaviour
     }
     
     // Collision with a trigger. Works on kinematic
+    // private void OnTriggerStay(Collider other)
+    // {
+    //     OnTriggerEnter(other);
+    // }
+    
     private void OnTriggerEnter(Collider other)
     {
+        contact = other.gameObject;
+
         // Get racket head info
-        dir = other.gameObject.GetComponent<Head>().dir;
-        speed = other.gameObject.GetComponent<Head>().speed;
+        dir = contact.GetComponent<Head>().dir;
+        speed = contact.GetComponent<Head>().speed;
         master.ballSpd = speed; // Update debug info
 
         // Normalize to X+

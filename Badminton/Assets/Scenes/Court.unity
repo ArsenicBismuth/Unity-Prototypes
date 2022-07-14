@@ -776,8 +776,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52608ba6a2e37204a845fddf216d2c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clone: 5
   speed: 0
   dir: {x: 0, y: 0, z: 0}
+  master: 1
 --- !u!65 &271810418
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2824,7 +2826,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh26130
+  m_Name: pb_Mesh39686
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5924,8 +5926,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52608ba6a2e37204a845fddf216d2c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clone: 5
   speed: 0
   dir: {x: 0, y: 0, z: 0}
+  master: 1
 --- !u!65 &1479900415
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7651,7 +7655,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1983297356}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -7664,7 +7668,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a2369776458e2f24db61e68cea083a3a, type: 2}
+  - {fileID: 2100000, guid: 92406fcb42770754f87148e739fd4680, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7706,8 +7710,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52608ba6a2e37204a845fddf216d2c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clone: 4
   speed: 0
   dir: {x: 0, y: 0, z: 0}
+  master: 1
 --- !u!1 &2030895723
 GameObject:
   m_ObjectHideFlags: 0

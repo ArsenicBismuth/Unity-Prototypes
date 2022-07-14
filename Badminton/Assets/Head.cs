@@ -8,15 +8,18 @@ public class Head : MonoBehaviour
     public int clone = 5;
     public float speed;
     public Vector3 dir;
-    private Vector3 oldPos;
     public bool master = true;
+
+    private Quaternion pRot;
+    private Vector3 pPos;
 
     private int frame = 0;
     
     // Start is called before the first frame update
     void Start()
     {
-        oldPos = transform.position;
+        pPos = transform.position;
+        pRot = transform.rotation;
     }
 
     // Update is called once per frame
@@ -26,7 +29,7 @@ public class Head : MonoBehaviour
         // Only if main object (instance id = original id)
         if (master) {
             // Get speed
-            Vector3 diff = transform.position - oldPos;
+            Vector3 diff = transform.position - pPos;
             speed = diff.magnitude / Time.deltaTime;
             
             // Get direction. Ignore slice: Always head's dir
@@ -41,15 +44,11 @@ public class Head : MonoBehaviour
             if (diff.magnitude > 0) {
                 var n = clone+1;
                 for (int i=1; i<n; i++) {
-                    // Set position, inbetween
-                    Vector3 pos = oldPos + i*diff/n;
 
-                    // Look at diff direction
-                    Quaternion rot = Quaternion.LookRotation(-diff, Vector3.up);
-                    // This is functionally unnecessary, but for proper contact
-                    GameObject racket = transform.parent.gameObject;
-                    rot *= Quaternion.Euler(0, 0, racket.transform.rotation.x);
-                    
+                    // Interpolate spherically between the two
+                    Vector3 pos = Vector3.Slerp(pPos, transform.position, (float)i/n);
+                    Quaternion rot = Quaternion.Slerp(pRot, transform.rotation, (float)i/n);
+
                     var obj = Instantiate(gameObject, pos, rot);
                     obj.GetComponent<Head>().master = false;
                     obj.GetComponent<Head>().speed = speed;
@@ -57,10 +56,18 @@ public class Head : MonoBehaviour
                 }
             }
 
-            oldPos = transform.position;
+            pPos = transform.position;
+            pRot = transform.rotation;
 
         // The clones
         } else {
+            
+            // Update dir to accurately reflect slerp
+            if (Vector3.Dot(transform.forward, dir) >= 0)
+                dir = transform.forward;
+            else
+                dir = -1 * transform.forward;
+
             // Remove itself in next frame (or instantly)
             if (frame >= 0)
                 Destroy(gameObject);

@@ -6,6 +6,10 @@ public class Ball : MonoBehaviour
 {
     
     public Master master;
+    public static float terminal = 6.7f; // Terminal velocity, 6.51 to 6.87 m/s
+    private float vtr = terminal;
+    private float vt = terminal*terminal;
+
     public float speed;
     public Vector3 dir;
     
@@ -37,8 +41,11 @@ public class Ball : MonoBehaviour
         speed = other.gameObject.GetComponent<Head>().speed;
         master.ballSpd = speed; // Update debug info
 
-        // Get 2D vector by removing yaw (y-axis rotation)
+        // Normalize to X+
         float ydeg = -Mathf.Rad2Deg*Mathf.Atan(dir.z/dir.x);
+        if (dir.x < 0) ydeg -= 180;
+        
+        // Get 2D vector by removing yaw (y-axis rotation)
         yaw = Quaternion.Euler(0, ydeg, 0);     // Get the yaw
         dir2 = Quaternion.Inverse(yaw) * dir;   // Remove yaw
         
@@ -57,29 +64,48 @@ public class Ball : MonoBehaviour
         lineLaser.SetPosition(1, endPos);
         
         // Intensity line
-        Vector3 endPos2 = startPos + (speed/10 * dir);
-        lineSpeed.SetPosition(0, startPos);
+        Vector3 endPos2 = startPos + (speed/60 * dir);
+        lineSpeed.SetPosition(0, endPos2 - 0.05f*dir);
         lineSpeed.SetPosition(1, endPos2);
     }
 
+    private float g = -Physics.gravity.y;
+
     private float CurveX(float t) {
+        float vx = speed * dir2.x;  // Initial
+        float x = vt/g * Mathf.Log((vx*g*t + vt) / vt);
+        return x;
+    }
+
+    private float CurveY(float x) {
+        float vy = speed * dir2.y;  // Initial
+        float vx = speed * dir2.x;
+        float atan = Mathf.Atan(vtr/vy);
+
+        float y = vt/g * Mathf.Log( Mathf.Sin( vtr * (Mathf.Exp(g*x/vt)-1) / vx + atan ) / Mathf.Sin(atan) );
+        return y;
+    }
+    
+    private float SimpleCurveX(float t) {
         float x = speed * dir2.x * t;
         return x;
     }
 
-    private float CurveY(float t) {
+    private float SimpleCurveY(float t) {
         float y = (float)(speed * dir2.y * t + 0.5 * Physics.gravity.y * t*t);
         return y;
     }
     
     private void DrawCurve()
     {
+        // Ref: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3761540/
+
         // Set ball as origin
         Vector3 startPos = transform.position;
 
         // Delta time for each point
         lineCurve.positionCount = 100;
-        float dt = (20f/speed)/100;  // Set for 100pts within 20m
+        float dt = (80f/speed)/100;  // Set for 100pts within 80m
 
         // float dt = 24f/160;  // Set so that 160m/s has 24pts
         // Debug.Log(dt);
@@ -88,9 +114,16 @@ public class Ball : MonoBehaviour
 
         // Create point
         for (int i = 0; i < lineCurve.positionCount; i++) {
+
+            // Calculate x & y
             float x = CurveX(i*dt);
-            float y = CurveY(i*dt);
+            float y = CurveY(x);
             points[i] = startPos + yaw * new Vector3(x, y, 0);
+
+            // Hit ground
+            if (points[i].y < 0) {
+                lineCurve.positionCount = i+1;
+            }
         }
         lineCurve.SetPositions(points);
     }

@@ -372,9 +372,9 @@ MonoBehaviour:
   master: {fileID: 671983132}
   range:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 2.7, y: 0, z: 3}
+    m_Extent: {x: 1, y: 0, z: 1}
   accel: 8
-  dist: 4
+  dist: 2
   baseReset: 0
 --- !u!143 &20094174
 CharacterController:
@@ -8368,9 +8368,9 @@ MonoBehaviour:
   master: {fileID: 671983132}
   range:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 1, y: 0, z: 1}
+    m_Extent: {x: 2.7, y: 0, z: 3}
   accel: 8
-  dist: 2
+  dist: 4
   baseReset: 0
 --- !u!143 &1565928092
 CharacterController:

@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     
     public float speed = 1;
     public XRNode inputSource;
+    private InputDevice device;
     public Camera cam;
     
     private Vector2 inputAxis;
@@ -18,12 +19,12 @@ public class Movement : MonoBehaviour
     void Start()
     {
         character = GetComponent<CharacterController>();
+        device = InputDevices.GetDeviceAtXRNode(inputSource);
     }
 
     // Update is called once per frame
     void Update()
     {
-        InputDevice device = InputDevices.GetDeviceAtXRNode(inputSource);
         device.TryGetFeatureValue(CommonUsages.primary2DAxis, out inputAxis);
     // }
     

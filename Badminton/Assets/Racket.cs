@@ -27,6 +27,6 @@ public class Racket : MonoBehaviour
         // Follow physically the controller, with certain angle
         rb.MovePosition(controller.position + controller.rotation * posOffset);
         rb.MoveRotation(controller.rotation * rotOffset);
-        // rb.MoveRotation(controller.rotation * Quaternion.Euler(0, rotate, 0));
+
     }
 }

@@ -47,6 +47,9 @@ public class Ball : MonoBehaviour
 
             init = Time.time;
             pos0 = transform.position;
+
+            // Draw trajcetory on spawn
+            // Draw(transform.forward, moveSpd);
             
             // Set direction, the formula uses x,y for z,y (squash xz => x)
             move1 = new Vector3(transform.forward.x, 0, transform.forward.z);
@@ -59,8 +62,8 @@ public class Ball : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    // FixedUpdate to check collision better, behavior still eq to Update
+    void FixedUpdate()
     {
         // This is dynamic ball
         if (moveSpd > 0) {
@@ -90,37 +93,50 @@ public class Ball : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
+        contact = other.gameObject;
+
+        // Hitting net
+        if (contact.name == "Net") {
+            master.spawn -= 1;
+            Destroy(gameObject);
+            return;
+        }
+
+        // Check cooldown (in seconds)
+        if (lastHit + hitCD > Time.time) {
+            return;
+        }
+
+        // Get racket head info
+        Draw(contact.GetComponent<Head>().dir, contact.GetComponent<Head>().speed);
+        
+        lastHit = Time.time;
+
+        // For dynamic ones
         if (moveSpd > 0) {
 
             // Destroy on hit & add score
-            Destroy(gameObject);
             master.hit += 1;
             AudioSource.PlayClipAtPoint(audClip, transform.position, audVol);
-
-        } else {
-
-            // Check cooldown (in seconds)
-            if (lastHit + hitCD > Time.time) {
-                return;
-            }
-
-            contact = other.gameObject;
-
-            // Get racket head info
-            dir0 = contact.GetComponent<Head>().dir;
-            speed = contact.GetComponent<Head>().speed;
-            master.ballSpd = speed; // Update debug info
-            
-            // Get direction, the formula uses x,y for z,y (squash xz => x)
-            dir1 = new Vector3(dir0.x, 0, dir0.z);
-            dir2 = new Vector3(dir1.magnitude, dir0.y, 0);
-            
-            DrawStraight();
-            DrawCurve();
-
-            lastHit = Time.time;
+            Destroy(gameObject);
 
         }
+
+    }
+
+    private void Draw(Vector3 dir, float spd) {
+
+        // Update public var
+        dir0 = dir;
+        speed = spd;
+        master.ballSpd = speed; // Update debug info
+
+        // Get direction, the formula uses x,y for z,y (squash xz => x)
+        dir1 = new Vector3(dir0.x, 0, dir0.z);
+        dir2 = new Vector3(dir1.magnitude, dir0.y, 0);
+        
+        DrawStraight();
+        DrawCurve();
     }
     
     private void DrawStraight()

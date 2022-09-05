@@ -59,7 +59,7 @@ public class Master : MonoBehaviour
         debugTxt.text = fps +"\n"+
             pfps +" "+ timestep +"\n"+
             ballSpd +"\n"+ headSpd +"\n\n"+
-            score;
+            score+"%";
 
         iter++;
     }

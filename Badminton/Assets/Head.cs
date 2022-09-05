@@ -22,11 +22,11 @@ public class Head : MonoBehaviour
         pRot = transform.rotation;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    // Update because speed calc is wonky with FixedUpdate at low deltaTime
+    void Update()
     {
         
-        // Only if main object (instance id = original id)
+        // Only if main object
         if (master) {
             // Get speed
             Vector3 diff = transform.position - pPos;

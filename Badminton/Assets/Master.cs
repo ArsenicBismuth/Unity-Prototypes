@@ -54,7 +54,7 @@ public class Master : MonoBehaviour
         float timestep = Time.fixedDeltaTime;
         float pfps = (int)(1f / timestep);
 
-        if (spawn > 0) score = Mathf.Round(hit/spawn*100);
+        if (spawn > 0) score = hit*100/spawn;
 
         debugTxt.text = fps +"\n"+
             pfps +" "+ timestep +"\n"+

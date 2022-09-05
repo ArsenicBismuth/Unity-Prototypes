@@ -15,13 +15,15 @@ public class Ball : MonoBehaviour
 
     // Physics, dynamic for itself
     public float moveSpd = -1;
+    private Vector3 pos0;   // Initial position since launched
+    private Vector3 move1;  // Forward without y
+    private Vector3 move2;  // Dir w/o y-axis rot or yaw (z=0)
 
     // Physics, static for gizmos
     public float speed;
-    public Vector3 dir0;
-    
-    private Vector3 dir2;   // dir w/o y-axis rot or yaw (z=0)
-    private Quaternion yaw; // up or y-axis rotation
+    public Vector3 dir0;    // Racket head
+    private Vector3 dir1;   // Forward without y
+    private Vector3 dir2;   // Dir w/o y-axis rot or yaw (z=0)
 
     // Gizmos
     public LineRenderer lineLaser;
@@ -31,6 +33,7 @@ public class Ball : MonoBehaviour
     // Logics
     private float hitCD = 0.5f;
     private float lastHit = 0;  // Time of last hit
+    private float init = 0;     // Time initialized
 
     // Audio
     public AudioClip audClip;
@@ -40,7 +43,20 @@ public class Ball : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (moveSpd > 0) {
+
+            init = Time.time;
+            pos0 = transform.position;
+            
+            // Set direction, the formula uses x,y for z,y (squash xz => x)
+            move1 = new Vector3(transform.forward.x, 0, transform.forward.z);
+            move2 = new Vector3(move1.magnitude, transform.forward.y, 0);
+            
+            // Delete itself after few sec
+            Destroy(gameObject, 2);
+
+        }
+
     }
 
     // Update is called once per frame
@@ -48,44 +64,31 @@ public class Ball : MonoBehaviour
     {
         // This is dynamic ball
         if (moveSpd > 0) {
-            // Delete itself after few sec
-            Destroy(gameObject, 2);
 
-            // Set direction & speed (absolute coz Translate() will be local)
-            Vector3 ballDir = Vector3.forward;
+            float v0 = moveSpd;
+            float Dt = Time.time - init;   // Time since start
 
-            // Translate relative to local space
-            transform.Translate(ballDir * moveSpd * Time.deltaTime);
+            // Calculate relative position from pos0 (not speed)
+            float x = CurveX(v0, Dt, move2);
+            float y = CurveY(v0, x, move2);
+            // float x = SimpleCurveX(v0, Dt, move2);
+            // float y = SimpleCurveY(v0, Dt, move2);
+            // Console.Log(x,y);
+
+            // Set position forward by x, and up by y
+            transform.position = pos0 + move1.normalized * x + Vector3.up * y;
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1, Color.yellow);
+            
+            // Hit ground
+            if (transform.position.y < 0) {
+                Destroy(gameObject);
+            }
+
         }
     }
     
     private void OnTriggerEnter(Collider other)
     {
-
-        // Check cooldown (in seconds)
-        if (lastHit + hitCD > Time.time) {
-            return;
-        }
-
-        contact = other.gameObject;
-
-        // Get racket head info
-        dir0 = contact.GetComponent<Head>().dir;
-        speed = contact.GetComponent<Head>().speed;
-        master.ballSpd = speed; // Update debug info
-
-        // Normalize to X+
-        float ydeg = -Mathf.Rad2Deg*Mathf.Atan(dir0.z/dir0.x);
-        if (dir0.x < 0) ydeg -= 180;
-        
-        // Get 2D vector by removing yaw (y-axis rotation)
-        yaw = Quaternion.Euler(0, ydeg, 0);     // Get the yaw
-        dir2 = Quaternion.Inverse(yaw) * dir0;   // Remove yaw
-        
-        DrawStraight();
-        DrawCurve();
-
-        lastHit = Time.time;
 
         if (moveSpd > 0) {
 
@@ -93,6 +96,29 @@ public class Ball : MonoBehaviour
             Destroy(gameObject);
             master.hit += 1;
             AudioSource.PlayClipAtPoint(audClip, transform.position, audVol);
+
+        } else {
+
+            // Check cooldown (in seconds)
+            if (lastHit + hitCD > Time.time) {
+                return;
+            }
+
+            contact = other.gameObject;
+
+            // Get racket head info
+            dir0 = contact.GetComponent<Head>().dir;
+            speed = contact.GetComponent<Head>().speed;
+            master.ballSpd = speed; // Update debug info
+            
+            // Get direction, the formula uses x,y for z,y (squash xz => x)
+            dir1 = new Vector3(dir0.x, 0, dir0.z);
+            dir2 = new Vector3(dir1.magnitude, dir0.y, 0);
+            
+            DrawStraight();
+            DrawCurve();
+
+            lastHit = Time.time;
 
         }
     }
@@ -162,7 +188,9 @@ public class Ball : MonoBehaviour
             // Calculate x & y
             float x = CurveX(speed, i*dt, dir2);
             float y = CurveY(speed, x, dir2);
-            points[i] = startPos + yaw * new Vector3(x, y, 0);
+            // float x = SimpleCurveX(speed, i*dt, dir2);
+            // float y = SimpleCurveY(speed, i*dt, dir2);
+            points[i] = startPos + dir1.normalized * x + Vector3.up * y;
 
             // Hit ground
             if (points[i].y < 0) {
@@ -177,5 +205,6 @@ public class Ball : MonoBehaviour
     {
         // Debug show hit line
         Debug.DrawRay(transform.position, dir0, Color.white);
+        Debug.DrawRay(transform.position, dir1, Color.yellow);
     }
 }

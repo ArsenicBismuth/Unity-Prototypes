@@ -50,7 +50,7 @@ public class Spawner : MonoBehaviour
         // Define the shot & parameters, in m/s & degrees
         Shot shot = push;
         float spd = Random.Range(shot.spdMin, shot.spdMax);
-        float lift = Random.Range(shot.upMin, shot.upMax);      // X-rot
+        float lift = Random.Range(-shot.upMax, -shot.upMin);      // X-rot
         float side = Random.Range(delta.eulerAngles.y + shot.sideMin, delta.eulerAngles.y + shot.sideMax);  // Y-rot
 
         Quaternion dir = Quaternion.Euler( lift, side, 0);

@@ -246,7 +246,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 155
+  m_VersionIndex: 206
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -313,6 +313,7 @@ GameObject:
   - component: {fileID: 7952565932870750960}
   - component: {fileID: 7952565932870750961}
   - component: {fileID: 7952565932870750966}
+  - component: {fileID: 5040697337934846863}
   - component: {fileID: 7952565932870750957}
   - component: {fileID: 4173589357492497501}
   m_Layer: 6
@@ -397,10 +398,24 @@ SphereCollider:
   m_GameObject: {fileID: 7952565932870750967}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &5040697337934846863
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7952565932870750967}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 6
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: -2.54}
 --- !u!114 &7952565932870750957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,7 +432,7 @@ MonoBehaviour:
   contact: {fileID: 0}
   moveSpd: -1
   speed: 0
-  dir: {x: 0, y: 0, z: 0}
+  dir0: {x: 0, y: 0, z: 0}
   lineLaser: {fileID: 0}
   lineSpeed: {fileID: 0}
   lineCurve: {fileID: 0}

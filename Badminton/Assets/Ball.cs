@@ -7,6 +7,7 @@ public class Ball : MonoBehaviour
     
     public Master master;
     public GameObject contact;
+    private GameObject child;
 
     // Parameters
     public static float terminal = 6.7f; // Terminal velocity, 6.51 to 6.87 m/s
@@ -18,6 +19,7 @@ public class Ball : MonoBehaviour
     private Vector3 pos0;   // Initial position since launched
     private Vector3 move1;  // Forward without y
     private Vector3 move2;  // Dir w/o y-axis rot or yaw (z=0)
+    private Vector3 prev;   // Prev pos, to get dir & rotate the mesh (child)
 
     // Physics, static for gizmos
     public float speed;
@@ -45,6 +47,9 @@ public class Ball : MonoBehaviour
     {
         if (moveSpd > 0) {
 
+            // Get the visible part of object (child)
+            child = gameObject.transform.GetChild(0).gameObject;
+
             init = Time.time;
             pos0 = transform.position;
 
@@ -62,11 +67,21 @@ public class Ball : MonoBehaviour
 
     }
 
+    void Update() {
+        if (moveSpd > 0) {
+            Vector3 dir = transform.position - prev;
+            Debug.Log(dir);
+            child.transform.rotation = Quaternion.LookRotation(dir);
+        }
+    }
+
     // FixedUpdate to check collision better, behavior still eq to Update
     void FixedUpdate()
     {
         // This is dynamic ball
         if (moveSpd > 0) {
+
+            prev = transform.position;
 
             float v0 = moveSpd;
             float Dt = Time.time - init;   // Time since start

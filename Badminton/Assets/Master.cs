@@ -27,7 +27,8 @@ public class Master : MonoBehaviour
 
     // Toggle
     public bool spawner = false;
-    public bool stationary = true;
+    public bool staticBall = true;
+    public bool enemyMove = true;
     private GameObject[] statics;
 
     // Scoring
@@ -90,12 +91,16 @@ public class Master : MonoBehaviour
     }
 
     public void ToggleStatic() {
-        stationary = !stationary;
+        staticBall = !staticBall;
         
         // Toggle objects
         foreach (GameObject ball in statics) {
-            ball.SetActive(stationary);
+            ball.SetActive(staticBall);
         }
+    }
+    
+    public void ToggleMovement() {
+        enemyMove = !enemyMove;
     }
 
     // Utility

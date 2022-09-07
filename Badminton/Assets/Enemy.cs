@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour
         if (onPos) {
 
             // Check cooldown (in seconds)
-            if (lastMove + moveCD > Time.time) {
+            if (lastMove + moveCD > Time.time || !master.enemyMove) {
                 return;
             }
 

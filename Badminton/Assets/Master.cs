@@ -36,6 +36,9 @@ public class Master : MonoBehaviour
     public int hit = 0;
     private float score = 0;
 
+    // Database - Shot types
+    public List<ShotData> Shots;
+
     void Start()
     {
         // References: https://docs.unity3d.com/Packages/com.unity.xr.oculus@3.0/api/Unity.XR.Oculus.html

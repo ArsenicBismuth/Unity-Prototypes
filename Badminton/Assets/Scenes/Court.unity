@@ -418,7 +418,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 38573343}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.06, y: 0.79, z: 0}
+  m_LocalPosition: {x: -0.06, y: 0.79, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1267,7 +1267,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31430
+  m_Name: pb_Mesh-1438
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1896,7 +1896,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32150
+  m_Name: pb_Mesh-1618
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2298,7 +2298,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31868
+  m_Name: pb_Mesh-1298
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3926,7 +3926,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32112
+  m_Name: pb_Mesh-1466
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4589,7 +4589,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32458
+  m_Name: pb_Mesh-1382
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5440,7 +5440,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31646
+  m_Name: pb_Mesh-1590
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5863,7 +5863,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32570
+  m_Name: pb_Mesh-1562
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6061,6 +6061,43 @@ MonoBehaviour:
   enemyMove: 1
   spawn: 0
   hit: 0
+  Shots:
+  - Name: Custom
+    spdMin: 0
+    spdMax: 0
+    upMin: 0
+    upMax: 0
+    sideMin: 0
+    sideMax: 0
+    hMin: 0
+    hMax: 0
+  - Name: Smash
+    spdMin: 50
+    spdMax: 70
+    upMin: -6
+    upMax: -4
+    sideMin: -5
+    sideMax: 5
+    hMin: 3
+    hMax: 3.2
+  - Name: Net
+    spdMin: 15
+    spdMax: 25
+    upMin: -2
+    upMax: 5
+    sideMin: -10
+    sideMax: 10
+    hMin: 1.7
+    hMax: 1.8
+  - Name: Clear
+    spdMin: 45
+    spdMax: 40
+    upMin: 0
+    upMax: 0
+    sideMin: 0
+    sideMax: 0
+    hMin: 1.75
+    hMax: 1.75
 --- !u!4 &671983133
 Transform:
   m_ObjectHideFlags: 0
@@ -6082,7 +6119,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32588
+  m_Name: pb_Mesh-1354
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8558,13 +8595,26 @@ MonoBehaviour:
   sphere: {fileID: 1625543688}
   ball: {fileID: 636956842}
   spawnCD: 0.4
-  push:
-    spdMin: 10
-    spdMax: 20
+  custom:
+    Name: Shot
+    spdMin: 0
+    spdMax: 0
     upMin: 0
-    upMax: 10
-    sideMin: -10
-    sideMax: 10
+    upMax: 0
+    sideMin: 0
+    sideMax: 0
+    hMin: 0
+    hMax: 0
+  shot:
+    Name: Shot
+    spdMin: 0
+    spdMax: 0
+    upMin: 0
+    upMax: 0
+    sideMin: 0
+    sideMax: 0
+    hMin: 0
+    hMax: 0
 --- !u!1 &1045848415
 GameObject:
   m_ObjectHideFlags: 0
@@ -9347,7 +9397,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31814
+  m_Name: pb_Mesh26762
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9555,20 +9605,33 @@ MonoBehaviour:
   sphere: {fileID: 640835499}
   ball: {fileID: 636956842}
   spawnCD: 0.6
-  push:
+  custom:
+    Name: Shot
+    spdMin: 0
+    spdMax: 0
+    upMin: 0
+    upMax: 0
+    sideMin: 0
+    sideMax: 0
+    hMin: 0
+    hMax: 0
+  shot:
+    Name: Smash
     spdMin: 50
     spdMax: 70
     upMin: -6
     upMax: -4
     sideMin: -5
     sideMax: 5
+    hMin: 3
+    hMax: 3.2
 --- !u!43 &1266212133
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31544
+  m_Name: pb_Mesh-1410
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9898,7 +9961,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32240
+  m_Name: pb_Mesh-1534
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10861,7 +10924,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31734
+  m_Name: pb_Mesh-1326
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11257,7 +11320,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32428
+  m_Name: pb_Mesh-1822
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11839,7 +11902,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1678562335}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.936, z: 0}
+  m_LocalPosition: {x: 0, y: 0.93600005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11864,13 +11927,26 @@ MonoBehaviour:
   sphere: {fileID: 255728740}
   ball: {fileID: 636956842}
   spawnCD: 0.6
-  push:
+  custom:
+    Name: Shot
+    spdMin: 0
+    spdMax: 0
+    upMin: 0
+    upMax: 0
+    sideMin: 0
+    sideMax: 0
+    hMin: 0
+    hMax: 0
+  shot:
+    Name: Net
     spdMin: 15
     spdMax: 25
     upMin: -2
     upMax: 5
     sideMin: -10
     sideMax: 10
+    hMin: 1.7
+    hMax: 1.8
 --- !u!1001 &1684129985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14665,13 +14741,26 @@ MonoBehaviour:
   sphere: {fileID: 1268338388}
   ball: {fileID: 636956842}
   spawnCD: 0.6
-  push:
-    spdMin: 70
-    spdMax: 70
-    upMin: -10
-    upMax: -10
+  custom:
+    Name: Shot
+    spdMin: 0
+    spdMax: 0
+    upMin: 0
+    upMax: 0
     sideMin: 0
     sideMax: 0
+    hMin: 0
+    hMax: 0
+  shot:
+    Name: Clear
+    spdMin: 45
+    spdMax: 40
+    upMin: 0
+    upMax: 0
+    sideMin: 0
+    sideMax: 0
+    hMin: 1.75
+    hMax: 1.75
 --- !u!1 &2085918425
 GameObject:
   m_ObjectHideFlags: 0

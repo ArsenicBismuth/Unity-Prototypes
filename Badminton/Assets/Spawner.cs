@@ -13,15 +13,14 @@ public class Spawner : MonoBehaviour
     
     private float lastSpawn = 0;    // Time of last spawn
     
-    // Types of shots & its parameters
-    [System.Serializable]
-    public struct Shot { 
-        public float spdMin; public float spdMax;   // m/s
-        public float upMin; public float upMax;     // deg, deviation from normal
-        public float sideMin; public float sideMax; // deg, deviation from player's position
-    }
-    public Shot push;
+    // Custom shot, undefined by Master.cs
+    public ShotData custom;
 
+    // Shot selector
+    [Dropdown("master.Shots", "Name")]
+    public ShotData shot;  // The selected shot
+
+    // Intermediatery
     private float scale = 0;    // Sphere size
 
     // Start is called before the first frame update
@@ -33,6 +32,11 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Get custom shot if shot select name = "Custom"
+        if (shot.Name == "Custom" || shot.Name == "") {
+            shot = custom;
+        }
+
         if (master.spawner) {
             // dScale = target scale / tick per CD = target / (dur / dt)
             scale += 0.1f / (spawnCD / Time.deltaTime);
@@ -48,12 +52,13 @@ public class Spawner : MonoBehaviour
         Quaternion delta = Quaternion.FromToRotation(transform.forward, player.transform.position - transform.position);
 
         // Define the shot & parameters, in m/s & degrees
-        Shot shot = push;
-        float spd = Random.Range(shot.spdMin, shot.spdMax);
-        float lift = Random.Range(-shot.upMax, -shot.upMin);      // X-rot
-        float side = Random.Range(delta.eulerAngles.y + shot.sideMin, delta.eulerAngles.y + shot.sideMax);  // Y-rot
+        float spd = shot.GetSpeed();
+        float lift = shot.GetLift();                     // X-rot
+        float side = shot.GetSide(delta.eulerAngles.y);  // Y-rot
+        float height = shot.GetHeight();
 
         Quaternion dir = Quaternion.Euler( lift, side, 0);
+        transform.position = new Vector3(transform.position.x, height, transform.position.z);
 
         // Instantiate the projectile at the position and rotation of this transform
         Ball clone;

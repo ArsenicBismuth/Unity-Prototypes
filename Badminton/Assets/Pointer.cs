@@ -6,6 +6,10 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Pointer : MonoBehaviour
 {
+
+    // Parameters
+    private int layerMask = 1 << 7; // Bit shift to get a bit mask, only Clickable
+    private int distance = 5;
     
     public XRNode inputSource;
     private InputDevice device;
@@ -29,13 +33,13 @@ public class Pointer : MonoBehaviour
         CheckInput();
         
         // Raycast to interact with buttons
-        int layerMask = 1 << 7; // Bit shift to get a bit mask, only Button
         RaycastHit hit;
 
         // Does the ray intersect only object in that layer
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 50, layerMask)) {
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distance, layerMask)) {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             hit.transform.gameObject.SendMessage("Hover");
+            Master.Log("Hover", hit.transform.gameObject.name);
 
             // Click while on hover - Trigger button (index)
             if (triggerButton.up) {

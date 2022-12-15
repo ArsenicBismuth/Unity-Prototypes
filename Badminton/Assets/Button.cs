@@ -9,7 +9,7 @@ public class Button : MonoBehaviour
     public GameObject child;    // The visible object
     public UnityEvent onClick;  // The function to be called
 
-    private float clickCD = 0.25f;
+    private float clickCD = 0.25f;  // Cooldown so it'll "stuck" for a while after clicked
     private bool onHover;
     private float clicked;
     private Vector3 initPos;
@@ -21,6 +21,7 @@ public class Button : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
+        // Move down and stay for a while after clicked
         if (clicked + clickCD > Time.time) {
             child.transform.position = initPos + new Vector3(0, -0.15f, 0);
         } else if (onHover) {

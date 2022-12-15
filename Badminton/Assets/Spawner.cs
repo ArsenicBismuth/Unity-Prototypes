@@ -6,7 +6,7 @@ public class Spawner : MonoBehaviour
 {
     
     public Master master;
-    public GameObject player;
+    public GameObject target;
     public GameObject sphere;
     public Ball ball;
     public float spawnCD = 0.4f;    // In seconds
@@ -48,8 +48,8 @@ public class Spawner : MonoBehaviour
             return;
         }
 
-        // Player's position to set as y-rot reference
-        Quaternion delta = Quaternion.FromToRotation(transform.forward, player.transform.position - transform.position);
+        // Target's position to set as y-rot reference
+        Quaternion delta = Quaternion.FromToRotation(transform.forward, target.transform.position - transform.position);
 
         // Define the shot & parameters, in m/s & degrees
         float spd = shot.GetSpeed();

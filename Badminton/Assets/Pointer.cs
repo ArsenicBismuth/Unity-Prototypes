@@ -44,9 +44,16 @@ public class Pointer : MonoBehaviour
 
             // Click while on hover - Trigger button (index)
             if (triggerButton.up) {
-                hit.transform.gameObject.SendMessage("Click", null, SendMessageOptions.DontRequireReceiver);
-                hit.transform.gameObject.SendMessage("onClick", null, SendMessageOptions.DontRequireReceiver);
-                Master.Log("Click", hit.transform.gameObject.name);
+
+                var ui = hit.transform.gameObject.GetComponent<UnityEngine.UI.Button>();
+                if (ui != null) {
+                    ui.onClick.Invoke();
+                    Master.Log("Click UI", hit.transform.gameObject.name);
+                } else {
+                    hit.transform.gameObject.SendMessage("Click", null, SendMessageOptions.DontRequireReceiver);
+                    Master.Log("Click", hit.transform.gameObject.name);
+                }
+                
             }
         }
 

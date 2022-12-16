@@ -38,12 +38,15 @@ public class Pointer : MonoBehaviour
         // Does the ray intersect only object in that layer
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distance, layerMask)) {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            hit.transform.gameObject.SendMessage("Hover");
+
+            hit.transform.gameObject.SendMessage("Hover", null, SendMessageOptions.DontRequireReceiver);
             // Master.Log("Hover", hit.transform.gameObject.name);
 
             // Click while on hover - Trigger button (index)
             if (triggerButton.up) {
-                hit.transform.gameObject.SendMessage("Click");
+                hit.transform.gameObject.SendMessage("Click", null, SendMessageOptions.DontRequireReceiver);
+                hit.transform.gameObject.SendMessage("onClick", null, SendMessageOptions.DontRequireReceiver);
+                Master.Log("Click", hit.transform.gameObject.name);
             }
         }
 

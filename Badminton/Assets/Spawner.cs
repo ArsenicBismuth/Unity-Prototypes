@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Spawner : MonoBehaviour
 {
@@ -18,7 +19,11 @@ public class Spawner : MonoBehaviour
 
     // Shot selector
     [Dropdown("master.Shots", "Name")]
-    public ShotData shot;  // The selected shot
+    public ShotData shot;   // The selected shot
+
+    // Shot UI
+    public Text shotTxt;
+    private int ishot = 0;   // Index for changing in-game
 
     // Intermediatery
     private float scale = 0;    // Sphere size
@@ -26,7 +31,7 @@ public class Spawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        shotTxt.text = shot.Name;
     }
 
     // Update is called once per frame
@@ -64,15 +69,25 @@ public class Spawner : MonoBehaviour
         Ball clone;
         clone = Instantiate(ball, transform.position, transform.rotation * dir);
         clone.moveSpd = spd;
-        clone.name = "Push";
+        clone.name = shot.Name;
         clone.tag = "BallDynamic";
 
         lastSpawn = Time.time;
-        master.spawn += 1;
+        master.spawn++;
 
         // Reset indicator size
         sphere.transform.localScale = new Vector3(0, 0, 0);
         scale = 0;
 
+    }
+
+    // Incrementally change the shot type
+    public void ChangeShot() {
+        ishot++;
+        if (ishot >= master.Shots.Count) ishot = 1;
+
+        shot = master.Shots[ishot];
+        shotTxt.text = shot.Name;
+        Master.Log("Shot", shot.Name);
     }
 }

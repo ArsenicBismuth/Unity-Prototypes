@@ -20,6 +20,7 @@ public class Ball : MonoBehaviour
     private Vector3 move1;  // Forward without y
     private Vector3 move2;  // Dir w/o y-axis rot or yaw (z=0)
     private Vector3 prev;   // Prev pos, to get dir & rotate the mesh (child)
+    public float statSpd = 0; // Current speed, measured
 
     // Physics, static for gizmos
     public float speed;
@@ -70,7 +71,6 @@ public class Ball : MonoBehaviour
     void Update() {
         if (moveSpd > 0) {
             Vector3 dir = transform.position - prev;
-            Debug.Log(dir);
             child.transform.rotation = Quaternion.LookRotation(dir);
         }
     }
@@ -89,9 +89,6 @@ public class Ball : MonoBehaviour
             // Calculate relative position from pos0 (not speed)
             float x = CurveX(v0, Dt, move2);
             float y = CurveY(v0, x, move2);
-            // float x = SimpleCurveX(v0, Dt, move2);
-            // float y = SimpleCurveY(v0, Dt, move2);
-            // Console.Log(x,y);
 
             // Set position forward by x, and up by y
             transform.position = pos0 + move1.normalized * x + Vector3.up * y;
@@ -101,6 +98,9 @@ public class Ball : MonoBehaviour
             if (transform.position.y < 0) {
                 Destroy(gameObject);
             }
+
+            // Measure speed
+            statSpd = (transform.position - prev).magnitude / Time.deltaTime;
 
         }
     }

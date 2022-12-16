@@ -14,11 +14,11 @@ public class Pointer : MonoBehaviour
     public XRNode inputSource;
     private InputDevice device;
 
-    private struct Input { 
+    private struct InputState { 
         public bool state, prev;
         public bool up, down;
     };
-    private Input triggerButton;
+    private InputState triggerButton;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +39,7 @@ public class Pointer : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distance, layerMask)) {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             hit.transform.gameObject.SendMessage("Hover");
-            Master.Log("Hover", hit.transform.gameObject.name);
+            // Master.Log("Hover", hit.transform.gameObject.name);
 
             // Click while on hover - Trigger button (index)
             if (triggerButton.up) {
@@ -69,6 +69,9 @@ public class Pointer : MonoBehaviour
             triggerButton.down = false;
         }
         triggerButton.prev = triggerButton.state;
+
+        // For debug, defaults to LCtrl or click
+        if (Input.GetButton("Fire1")) triggerButton.up = true;
     }
 
 }

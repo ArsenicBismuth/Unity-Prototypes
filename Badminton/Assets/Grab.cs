@@ -8,9 +8,12 @@ public class Grab : MonoBehaviour
     // Handle grabbing an object, moving its parent (since the mesh/collider is often the child of the actual object)
 
     public GameObject hand;
-    public bool onGrab = false;
+    public bool grabbed = false;
 
-    private float clickCD = 0.25f;  // Cooldown so it'll "stuck" for a while after clicked
+    // The function to be called
+    public UnityEvent onGrabEnter;
+    public UnityEvent onGrabExit;
+
     private bool onHover;
     private float clicked;
     
@@ -27,6 +30,7 @@ public class Grab : MonoBehaviour
     void Start() {
         // Determine if we grab the object itself or its parent
         if (transform.parent != null) target = transform.parent;
+        else target = transform;
 
         rb = GetComponent<Rigidbody>();
         if (!rb) initPos = target.transform.position;
@@ -37,9 +41,9 @@ public class Grab : MonoBehaviour
     // Update is called once per frame
     void Update() {
         // Follow hand with an offset
-        if (onGrab) target.position = hand.transform.position + Vector3.forward * 1;
+        if (grabbed) target.position = hand.transform.position + hand.transform.TransformDirection(Vector3.forward) * 1;
 
-        if (!onGrab && onHover) GetComponent<MeshRenderer>().material = matClick;
+        if (onHover) GetComponent<MeshRenderer>().material = matClick;
         else GetComponent<MeshRenderer>().material = matOrig;
 
         // Keep onHover false by default, unless overwritten
@@ -51,13 +55,15 @@ public class Grab : MonoBehaviour
     }
 
     void Click() {
-        onGrab = !onGrab;
+        grabbed = !grabbed;
         clicked = Time.time;
 
         // On state change
-        if (onGrab) {
+        if (grabbed) {
+            onGrabEnter?.Invoke();
             if (rb) DisableRagdoll();
         } else {
+            onGrabExit?.Invoke();
             if (rb) EnableRagdoll();
             else {
                 // Keep position, but reset vertical

@@ -102,6 +102,10 @@ public class Master : MonoBehaviour
         }
     }
     
+    public void SetMovement(bool val) {
+        enemyMove = val;
+    }
+
     public void ToggleMovement() {
         enemyMove = !enemyMove;
     }

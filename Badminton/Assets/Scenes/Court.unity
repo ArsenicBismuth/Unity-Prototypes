@@ -269,7 +269,7 @@ LineRenderer:
   - {x: 6.1, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -693,7 +693,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -827,7 +827,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -1105,7 +1105,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 4.75}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -1231,7 +1231,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136030
+  m_Name: pb_Mesh-1438
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1563,7 +1563,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260876117}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.27, y: 0.846, z: 3.46}
+  m_LocalPosition: {x: -3.64, y: 0.846, z: 6.95}
   m_LocalScale: {x: 0.5, y: 0.85, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1860,7 +1860,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh135992
+  m_Name: pb_Mesh-1618
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2058,7 +2058,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -2262,7 +2262,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136948
+  m_Name: pb_Mesh-1298
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3546,8 +3546,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 94.147766}
+  m_Center: {x: 0, y: 0, z: 46.573883}
 --- !u!23 &419093567
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3606,8 +3606,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 419093565}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.1674, z: 0}
-  m_LocalScale: {x: 6.1, y: 0.745263, z: 0.01}
+  m_LocalPosition: {x: 0, y: 1.1589, z: 0}
+  m_LocalScale: {x: 6.1, y: 0.7268874, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1805601886}
@@ -3654,7 +3654,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -3831,7 +3831,7 @@ LineRenderer:
   - {x: 6.1, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -3890,7 +3890,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136266
+  m_Name: pb_Mesh-1466
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4481,7 +4481,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136560
+  m_Name: pb_Mesh-1382
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4768,7 +4768,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -5175,7 +5175,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 4.75}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -5332,7 +5332,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136630
+  m_Name: pb_Mesh-1590
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5672,7 +5672,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh137196
+  m_Name: pb_Mesh-1562
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5890,14 +5890,14 @@ MonoBehaviour:
     hMin: 1.7
     hMax: 1.8
   - Name: PaperClear
-    spdMin: 40
-    spdMax: 40
-    upMin: 30
-    upMax: 30
+    spdMin: 35
+    spdMax: 45
+    upMin: 26
+    upMax: 32
     sideMin: 0
     sideMax: 0
     hMin: 2.5
-    hMax: 2.5
+    hMax: 2.8
   - Name: PaperSmash
     spdMin: 65
     spdMax: 75
@@ -5928,21 +5928,30 @@ MonoBehaviour:
   - Name: SmashAdv
     spdMin: 45
     spdMax: 53
-    upMin: -4
-    upMax: 0
+    upMin: -6
+    upMax: -2
     sideMin: -5
     sideMax: 5
-    hMin: 2.2
-    hMax: 2.5
+    hMin: 2.5
+    hMax: 3
   - Name: DropAdv
-    spdMin: 22
-    spdMax: 25
-    upMin: -2
-    upMax: 0
+    spdMin: 26
+    spdMax: 27
+    upMin: -3
+    upMax: -1
     sideMin: -5
     sideMax: 5
-    hMin: 2.3
-    hMax: 2.5
+    hMin: 2.5
+    hMax: 3
+  - Name: ClearAdv
+    spdMin: 30
+    spdMax: 35
+    upMin: 30
+    upMax: 30
+    sideMin: -2
+    sideMax: 2
+    hMin: 2.5
+    hMax: 2.8
 --- !u!4 &671983133
 Transform:
   m_ObjectHideFlags: 0
@@ -5964,7 +5973,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136858
+  m_Name: pb_Mesh-1354
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6162,7 +6171,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -7655,7 +7664,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 6.705}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -7884,7 +7893,7 @@ LineRenderer:
   - {x: 6.1, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -8160,7 +8169,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -8337,7 +8346,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 6.705}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -8851,7 +8860,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -9194,7 +9203,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 6.705}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -9253,7 +9262,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh168172
+  m_Name: pb_Mesh64204
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9417,7 +9426,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136070
+  m_Name: pb_Mesh-1410
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9664,7 +9673,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh135982
+  m_Name: pb_Mesh-1534
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10348,7 +10357,7 @@ Transform:
   m_GameObject: {fileID: 1426516096}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 419093569}
@@ -10437,7 +10446,7 @@ LineRenderer:
   - {x: 6.1, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -10627,7 +10636,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 6.705}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -10686,7 +10695,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh137128
+  m_Name: pb_Mesh-1326
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11162,7 +11171,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh168592
+  m_Name: pb_Mesh64288
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11673,7 +11682,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -11981,7 +11990,7 @@ LineRenderer:
   - {x: 6.1, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -12112,7 +12121,7 @@ LineRenderer:
   - {x: 6.1, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -12205,7 +12214,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -12469,7 +12478,7 @@ LineRenderer:
   - {x: 6.1, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -13162,7 +13171,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 6.705}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -13457,7 +13466,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 6.705}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -13550,7 +13559,7 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 257
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
@@ -13939,7 +13948,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 6.705}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -14282,7 +14291,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 6.705}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -14718,6 +14727,90 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &2138121848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2138121851}
+  - component: {fileID: 2138121850}
+  - component: {fileID: 2138121849}
+  m_Layer: 0
+  m_Name: SideCam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &2138121849
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138121848}
+  m_Enabled: 1
+--- !u!20 &2138121850
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138121848}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 1
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &2138121851
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138121848}
+  m_LocalRotation: {x: -0.034775026, y: -0.71046823, z: -0.035195123, w: 0.7019879}
+  m_LocalPosition: {x: 7.2530823, y: 1.9538472, z: 3.9745805}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 22
+  m_LocalEulerAnglesHint: {x: -5.672, y: -90.688, z: 0}
 --- !u!1001 &252358706969478627
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14991,13 +15084,18 @@ PrefabInstance:
     - target: {fileID: 7852228857922606704, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 260
+      value: 263
       objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: master
       value: 
       objectReference: {fileID: 671983132}
+    - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
+        type: 3}
+      propertyPath: terminal
+      value: 6.85
+      objectReference: {fileID: 0}
     - target: {fileID: 7952565932870750957, guid: 5b01c3c6d6ade6445bd8f203a6844af6,
         type: 3}
       propertyPath: lineCurve

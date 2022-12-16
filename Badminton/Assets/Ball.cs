@@ -10,9 +10,9 @@ public class Ball : MonoBehaviour
     private GameObject child;
 
     // Parameters
-    public static float terminal = 6.8f; // Terminal velocity, 6.51 to 6.87 m/s
-    private float vtr = terminal;           // vt root
-    private float vt = terminal*terminal;   // terminal squared
+    public float terminal = 6.8f; // Terminal velocity, 6.51 to 6.87 m/s
+    private float vtr;          // terminal itself (alt: root)
+    private float vt;           // terminal cubic (alt: terminal itself)
 
     // Physics, dynamic for itself
     public float moveSpd = -1;
@@ -20,6 +20,9 @@ public class Ball : MonoBehaviour
     private Vector3 move1;  // Forward without y
     private Vector3 move2;  // Dir w/o y-axis rot or yaw (z=0)
     private Vector3 prev;   // Prev pos, to get dir & rotate the mesh (child)
+
+    
+    private Vector3 dir;    // Direction, measured
     public float statSpd = 0; // Current speed, measured
 
     // Physics, static for gizmos
@@ -41,7 +44,11 @@ public class Ball : MonoBehaviour
     // Audio
     public AudioClip audClip;
     float audVol = 0.5f;
-    
+
+    void Awake() {
+        vtr = terminal;
+        vt = terminal*terminal;
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -69,10 +76,7 @@ public class Ball : MonoBehaviour
     }
 
     void Update() {
-        if (moveSpd > 0) {
-            Vector3 dir = transform.position - prev;
-            child.transform.rotation = Quaternion.LookRotation(dir);
-        }
+        
     }
 
     // FixedUpdate to check collision better, behavior still eq to Update
@@ -86,7 +90,7 @@ public class Ball : MonoBehaviour
             float v0 = moveSpd;
             float Dt = Time.time - init;   // Time since start
 
-            // Calculate relative position from pos0 (not speed)
+            // Calculate relative position (not speed) from pos0
             float x = CurveX(v0, Dt, move2);
             float y = CurveY(v0, x, move2);
 
@@ -107,8 +111,10 @@ public class Ball : MonoBehaviour
                 Destroy(gameObject);
             }
 
-            // Measure speed
-            statSpd = (transform.position - prev).magnitude / Time.deltaTime;
+            // Measure direction & speed
+            dir = transform.position - prev;
+            statSpd = dir.magnitude / Time.deltaTime;
+            child.transform.rotation = Quaternion.LookRotation(dir);    // Rotate the mesh
 
         }
     }

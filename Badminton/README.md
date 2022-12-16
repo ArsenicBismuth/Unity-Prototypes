@@ -23,5 +23,7 @@ Make sure you have Oculus Quest 2 plugged in with developer access. Execute Buil
 
 # References:
 
-- Complete video with amazing tracking: https://www.youtube.com/watch?v=vkEdRDwq4rA
-- Formula:  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3761540/
+- Real reference video with amazing tracking: https://www.youtube.com/watch?v=vkEdRDwq4rA
+- Formula w/ reference:  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3761540/
+- Formula complete: https://www.researchgate.net/publication/277607532
+- Smash velocity: https://www.researchgate.net/publication/264396764

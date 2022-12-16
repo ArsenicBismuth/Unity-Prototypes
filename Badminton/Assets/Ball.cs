@@ -10,7 +10,7 @@ public class Ball : MonoBehaviour
     private GameObject child;
 
     // Parameters
-    public static float terminal = 6.7f; // Terminal velocity, 6.51 to 6.87 m/s
+    public static float terminal = 6.8f; // Terminal velocity, 6.51 to 6.87 m/s
     private float vtr = terminal;           // vt root
     private float vt = terminal*terminal;   // terminal squared
 
@@ -96,6 +96,14 @@ public class Ball : MonoBehaviour
             
             // Hit ground
             if (transform.position.y < 0) {
+
+                // Out of bounds
+                if (Mathf.Abs(transform.position.x) > 2.6) {
+                    master.spawn -= 1;
+                } else if (Mathf.Abs(transform.position.y - 4) > 6.71) {
+                    master.spawn -= 1;
+                }
+
                 Destroy(gameObject);
             }
 

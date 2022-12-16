@@ -5867,7 +5867,7 @@ MonoBehaviour:
   ballSpd: 0
   spawner: 0
   staticBall: 1
-  enemyMove: 1
+  enemyMove: 0
   spawn: 0
   hit: 0
   Shots:
@@ -5889,15 +5889,15 @@ MonoBehaviour:
     sideMax: 10
     hMin: 1.7
     hMax: 1.8
-  - Name: Clear
-    spdMin: 45
+  - Name: PaperClear
+    spdMin: 40
     spdMax: 40
-    upMin: 0
-    upMax: 0
+    upMin: 30
+    upMax: 30
     sideMin: 0
     sideMax: 0
-    hMin: 1.75
-    hMax: 1.75
+    hMin: 2.5
+    hMax: 2.5
   - Name: PaperSmash
     spdMin: 65
     spdMax: 75
@@ -5916,15 +5916,33 @@ MonoBehaviour:
     sideMax: 5
     hMin: 3
     hMax: 3.2
-  - Name: Smash
+  - Name: SmashPro
     spdMin: 80
     spdMax: 90
-    upMin: -6
-    upMax: -4
+    upMin: -4
+    upMax: -2
     sideMin: -5
     sideMax: 5
     hMin: 3
     hMax: 3.2
+  - Name: SmashAdv
+    spdMin: 45
+    spdMax: 53
+    upMin: -4
+    upMax: 0
+    sideMin: -5
+    sideMax: 5
+    hMin: 2.2
+    hMax: 2.5
+  - Name: DropAdv
+    spdMin: 22
+    spdMax: 25
+    upMin: -2
+    upMax: 0
+    sideMin: -5
+    sideMax: 5
+    hMin: 2.3
+    hMax: 2.5
 --- !u!4 &671983133
 Transform:
   m_ObjectHideFlags: 0
@@ -9235,7 +9253,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136462
+  m_Name: pb_Mesh168172
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11144,7 +11162,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136882
+  m_Name: pb_Mesh168592
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12370,7 +12388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e2378f8a9a0634ab7db233ab95e728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 5
   inputSource: 5
   cam: {fileID: 963194227}
 --- !u!1 &1726207554
@@ -13815,7 +13833,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1965059962}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.595, y: 0.164, z: -0.018}
+  m_LocalPosition: {x: 2.253, y: 0.164, z: -0.018}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14826,11 +14844,56 @@ PrefabInstance:
       propertyPath: shotTxt
       value: 
       objectReference: {fileID: 207677150}
+    - target: {fileID: 4091071118779550786, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: shot.Name
+      value: SmashAdv
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091071118779550786, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: shot.hMax
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091071118779550786, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: shot.hMin
+      value: 2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091071118779550786, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: shot.upMax
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091071118779550786, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: shot.upMin
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091071118779550786, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: shot.spdMax
+      value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091071118779550786, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: shot.spdMin
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091071118779550787, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4091071119392816113, guid: 353e7d5986421b44f973712457660d01,
         type: 3}
       propertyPath: master
       value: 
       objectReference: {fileID: 671983132}
+    - target: {fileID: 4091071119392816118, guid: 353e7d5986421b44f973712457660d01,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.12
+      objectReference: {fileID: 0}
     - target: {fileID: 4091071119535840054, guid: 353e7d5986421b44f973712457660d01,
         type: 3}
       propertyPath: m_RootOrder
@@ -14849,7 +14912,7 @@ PrefabInstance:
     - target: {fileID: 4091071119535840054, guid: 353e7d5986421b44f973712457660d01,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.42
+      value: 9.05
       objectReference: {fileID: 0}
     - target: {fileID: 4091071119535840054, guid: 353e7d5986421b44f973712457660d01,
         type: 3}

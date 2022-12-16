@@ -20,3 +20,8 @@ Planned:
 ## Instructions
 
 Make sure you have Oculus Quest 2 plugged in with developer access. Execute Build & Run.
+
+# References:
+
+- Complete video with amazing tracking: https://www.youtube.com/watch?v=vkEdRDwq4rA
+- Formula:  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3761540/

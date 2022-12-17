@@ -13,19 +13,21 @@ public class Spawner : MonoBehaviour
     public float spawnCD = 0.4f;    // Cooldown in seconds
     
     private float lastSpawn = 0;    // Time of last spawn
-    
-    // Custom shot, undefined by Master.cs
-    public ShotData custom;
 
     // Shot selector
     [Dropdown("master.Shots", "Name")]
     public ShotData shot;   // The selected shot
+    public List<ShotData> plan;
+    private int iplan = 0;
 
     // Shot UI
     public Text shotTxt;
     public Text cooldownTxt;
-    private int ishot = 0;   // Index for changing in-game
-
+    private int ishot = 0;   // Index for UI
+    
+    // Plan UI
+    public Text planTxt;
+    
     // Intermediatery
     private float scale = 0;    // Sphere size
 
@@ -39,10 +41,6 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Get custom shot if shot select name = "Custom"
-        if (shot.Name == "Custom" || shot.Name == "") {
-            shot = custom;
-        }
 
         if (master.spawner && spawnCD > 0) {
             scale += 0.1f / (spawnCD / Time.deltaTime);
@@ -54,13 +52,20 @@ public class Spawner : MonoBehaviour
             return;
         }
 
-        // Target's position to set as y-rot reference
-        Quaternion delta = Quaternion.FromToRotation(transform.forward, target.transform.position - transform.position);
+        // Use plan if it exists
+        if (plan.Count > 0) {
+            shot = plan[iplan];
+            iplan++;
+            if (iplan >= plan.Count) iplan = 0;
+        } else {
+            // Target's position to set as y-rot reference, realtime for non-plan mode
+            shot.SetTarget(transform, target.transform);
+        }
 
         // Define the shot & parameters, in m/s & degrees
         float spd = shot.GetSpeed();
-        float lift = shot.GetLift();                     // X-rot
-        float side = shot.GetSide(delta.eulerAngles.y);  // Y-rot
+        float lift = shot.GetLift();  // X-rot
+        float side = shot.GetSide();  // Y-rot
         float height = shot.GetHeight();
 
         Quaternion dir = Quaternion.Euler( lift, side, 0);
@@ -97,7 +102,28 @@ public class Spawner : MonoBehaviour
         spawnCD += val;
         if (spawnCD < 0) spawnCD = 0;
 
-        cooldownTxt.text = (spawnCD*10).ToString();
+        cooldownTxt.text = Mathf.Round(spawnCD*10).ToString();
         Master.Log("CD", spawnCD);
+    }
+
+    // UI - Add plan based on current shot & target
+    public void AddPlan() {
+        ShotData child = shot;
+        child.SetTarget(transform, target.transform);
+        plan.Add(shot);
+        PrintPlan();
+    }
+
+    public void RemovePlan() {
+        plan.RemoveAt(plan.Count - 1);
+        PrintPlan();
+    }
+
+    public void PrintPlan() {
+        string text = "";
+        foreach (var shot in plan) {
+            text += shot.PrintShot();
+        }
+        planTxt.text = text;
     }
 }

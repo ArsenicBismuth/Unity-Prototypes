@@ -31,7 +31,6 @@ public class Master : MonoBehaviour
 
     // Toggle
     public bool spawner = false;
-    public bool staticBall = true;
     public bool enemyMove = true;
     private GameObject[] statics;
 
@@ -100,15 +99,6 @@ public class Master : MonoBehaviour
             score = 0;
         }
     }
-
-    public void ToggleStatic() {
-        staticBall = !staticBall;
-        
-        // Toggle objects
-        foreach (GameObject ball in statics) {
-            ball.SetActive(staticBall);
-        }
-    }
     
     public void SetMovement(bool val) {
         enemyMove = val;
@@ -119,6 +109,11 @@ public class Master : MonoBehaviour
     }
 
     // Utility
+    public static void ToggleObject(GameObject obj) {
+        if (obj.activeSelf) obj.SetActive(false);
+        else obj.SetActive(true);
+    }
+
     public static void Log(params object[] a)
     {
         // General printing routine like Javascript, but on canvas

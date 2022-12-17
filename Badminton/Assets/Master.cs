@@ -13,15 +13,19 @@ public class Master : MonoBehaviour
     public Text debugTxt;
     public Text consoleTxt;
     public Head racket;
+    public GameObject court;
     private int fps;        // Visual
     private int timestep;   // Physics
 
     private static Text consoleLog;
+
+    // Intermediate
+    private static GameObject _court;
     
-    // Will be updated by latest ball being hit
+    // Stats of latest data
     public float ballSpd = 0;
-    
     private float headSpd = 0;
+
     private int reset = 3*90;
     private int iter = 0;
 
@@ -38,6 +42,10 @@ public class Master : MonoBehaviour
 
     // Database - Shot types
     public List<ShotData> Shots;
+
+    void Awake() {
+        _court = court;
+    }
 
     void Start()
     {
@@ -133,5 +141,19 @@ public class Master : MonoBehaviour
                 .ToArray();
             consoleLog.text = string.Join('\n', lines);
         };
+    }
+
+    // Court
+    public static bool CourtOut(Vector3 position, bool single = true) {
+        Vector3 center = _court.transform.position;
+        Vector3 pos = position-center;
+
+        if (single) {
+            if (Mathf.Abs(pos.x) > 5.18/2 || Mathf.Abs(pos.z) > 13.4/2) return true;
+            else return false;
+        } else {
+            if (Mathf.Abs(pos.x) > 6.1/2 || Mathf.Abs(pos.z) > 13.4/2) return true;
+            else return false;
+        }
     }
 }

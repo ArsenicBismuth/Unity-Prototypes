@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour
     public GameObject target;
     public GameObject sphere;
     public Ball ball;
-    public float spawnCD = 0.4f;    // In seconds
+    public float spawnCD = 0.4f;    // Cooldown in seconds
     
     private float lastSpawn = 0;    // Time of last spawn
     
@@ -23,6 +23,7 @@ public class Spawner : MonoBehaviour
 
     // Shot UI
     public Text shotTxt;
+    public Text cooldownTxt;
     private int ishot = 0;   // Index for changing in-game
 
     // Intermediatery
@@ -32,6 +33,7 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         shotTxt.text = shot.Name;
+        cooldownTxt.text = (spawnCD*10).ToString();
     }
 
     // Update is called once per frame
@@ -42,8 +44,7 @@ public class Spawner : MonoBehaviour
             shot = custom;
         }
 
-        if (master.spawner) {
-            // dScale = target scale / tick per CD = target / (dur / dt)
+        if (master.spawner && spawnCD > 0) {
             scale += 0.1f / (spawnCD / Time.deltaTime);
             sphere.transform.localScale = new Vector3(scale, scale, scale);
         }
@@ -81,7 +82,7 @@ public class Spawner : MonoBehaviour
 
     }
 
-    // Incrementally change the shot type
+    // UI - Incrementally change the shot type
     public void ChangeShot() {
         ishot++;
         if (ishot >= master.Shots.Count) ishot = 1;
@@ -89,5 +90,14 @@ public class Spawner : MonoBehaviour
         shot = master.Shots[ishot];
         shotTxt.text = shot.Name;
         Master.Log("Shot", shot.Name);
+    }
+    
+    // UI - Change frequency
+    public void ChangeCD(float val) {
+        spawnCD += val;
+        if (spawnCD < 0) spawnCD = 0;
+
+        cooldownTxt.text = (spawnCD*10).ToString();
+        Master.Log("CD", spawnCD);
     }
 }

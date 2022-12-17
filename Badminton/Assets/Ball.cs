@@ -102,9 +102,7 @@ public class Ball : MonoBehaviour
             if (transform.position.y < 0) {
 
                 // Out of bounds
-                if (Mathf.Abs(transform.position.x) > 2.6) {
-                    master.spawn -= 1;
-                } else if (Mathf.Abs(transform.position.y - 4) > 6.71) {
+                if (Master.CourtOut(transform.position)) {
                     master.spawn -= 1;
                 }
 

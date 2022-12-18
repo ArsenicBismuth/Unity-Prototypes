@@ -141,11 +141,11 @@ public class Ball : MonoBehaviour
 
         // Contact racket, check if in valid area
         Head racket = contact.GetComponent<Head>();
-        bool valid = racket.CheckHit(transform.position);
+        if (!racket) return;
 
         // Mark the ball in head's local transform
-        Vector3 relative = contact.transform.InverseTransformPoint(transform.position);
-        master.hitMarker.Mark(relative);
+        (bool valid, Vector3 relative) = racket.CheckHit(transform.position);
+        master.hitMarker.Mark(relative, valid);
 
         // Valid, get hit info
         if (valid) Draw(racket.dir, racket.speed);

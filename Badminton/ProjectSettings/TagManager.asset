@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BallStatic
   - BallDynamic
+  - UIMark
   layers:
   - Default
   - TransparentFX

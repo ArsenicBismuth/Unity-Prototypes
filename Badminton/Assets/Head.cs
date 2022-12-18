@@ -10,7 +10,7 @@ public class Head : MonoBehaviour
     public Vector3 dir;
     public bool master = true;
 
-    // Proper hit area
+    // Proper hit area, 0.5 for 1 total, and z=10 coz we knew it's a hit from collider
     public Bounds valid;
 
     private Quaternion pRot;
@@ -79,7 +79,16 @@ public class Head : MonoBehaviour
 
     }
 
-    public bool CheckHit(Vector3 pos) {
-        return valid.Contains(pos);
+    // Check a position if it's within valid hit zone
+    public (bool, Vector3) CheckHit(Vector3 contact) {
+        
+        // Check contact in head's local transform, determine validity
+        Vector3 relative = transform.InverseTransformPoint(contact);
+        bool inside = valid.Contains(relative);
+        
+        // Neutralize against scaling
+        relative = Vector3.Scale(relative, transform.localScale);
+
+        return (inside, relative);
     }
 }

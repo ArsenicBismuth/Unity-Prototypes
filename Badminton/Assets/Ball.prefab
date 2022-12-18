@@ -330,7 +330,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 245
+  m_VersionIndex: 269
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -448,8 +448,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   master: {fileID: 0}
+  racket: {fileID: 0}
   contact: {fileID: 0}
+  terminal: 6.7
   moveSpd: -1
+  statSpd: 0
   speed: 0
   dir0: {x: 0, y: 0, z: 0}
   lineLaser: {fileID: 0}

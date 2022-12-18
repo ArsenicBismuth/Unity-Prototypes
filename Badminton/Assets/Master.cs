@@ -39,6 +39,11 @@ public class Master : MonoBehaviour
     public int hit = 0;
     private float score = 0;
 
+    // Gizmos
+    public LineRenderer lineLaser;
+    public LineRenderer lineSpeed;
+    public LineRenderer lineCurve;
+
     // Database - Shot types
     public List<ShotData> Shots;
 

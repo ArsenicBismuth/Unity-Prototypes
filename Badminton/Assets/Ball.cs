@@ -32,9 +32,9 @@ public class Ball : MonoBehaviour
     private Vector3 dir2;   // Dir w/o y-axis rot or yaw (z=0)
 
     // Gizmos
-    public LineRenderer lineLaser;
-    public LineRenderer lineSpeed;
-    public LineRenderer lineCurve;
+    private LineRenderer lineLaser;
+    private LineRenderer lineSpeed;
+    private LineRenderer lineCurve;
 
     // Logics
     private float hitCD = 0.5f;
@@ -48,6 +48,10 @@ public class Ball : MonoBehaviour
     void Awake() {
         vtr = terminal;
         vt = terminal*terminal;
+
+        lineLaser = master.lineLaser;
+        lineSpeed = master.lineSpeed;
+        lineCurve = master.lineCurve;
     }
     
     // Start is called before the first frame update
@@ -129,15 +133,14 @@ public class Ball : MonoBehaviour
             return;
         }
 
-        // Check cooldown (in seconds)
+        // Prevent multi contacts in short period
         if (lastHit + hitCD > Time.time) {
             return;
         }
-
-        // Get racket head info
-        Draw(contact.GetComponent<Head>().dir, contact.GetComponent<Head>().speed);
-        
         lastHit = Time.time;
+
+        // Contact racket, get its info
+        Draw(contact.GetComponent<Head>().dir, contact.GetComponent<Head>().speed);
 
         // For dynamic ones
         if (moveSpd > 0) {
@@ -169,15 +172,18 @@ public class Ball : MonoBehaviour
     private void DrawStraight()
     {
         float length = 20;
-        Vector3 startPos = transform.position;
+        Vector3 startPos = Vector3.zero;
         Vector3 endPos = startPos + (length * dir0);
         
         // Direct projection
+        lineLaser.transform.position = transform.position;
         lineLaser.SetPosition(0, startPos);
         lineLaser.SetPosition(1, endPos);
+
         
-        // Intensity line
+        // Intensity line - small strip of line
         Vector3 endPos2 = startPos + (speed/60 * dir0);
+        lineSpeed.transform.position = transform.position;
         lineSpeed.SetPosition(0, endPos2 - 0.05f*dir0);
         lineSpeed.SetPosition(1, endPos2);
     }
@@ -214,7 +220,8 @@ public class Ball : MonoBehaviour
         // Ref: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3761540/
 
         // Set ball as origin
-        Vector3 startPos = transform.position;
+        Vector3 startPos = Vector3.zero;
+        lineCurve.transform.position = transform.position;
 
         // Delta time for each point
         lineCurve.positionCount = 100;
@@ -231,8 +238,6 @@ public class Ball : MonoBehaviour
             // Calculate x & y
             float x = CurveX(speed, i*dt, dir2);
             float y = CurveY(speed, x, dir2);
-            // float x = SimpleCurveX(speed, i*dt, dir2);
-            // float y = SimpleCurveY(speed, i*dt, dir2);
             points[i] = startPos + dir1.normalized * x + Vector3.up * y;
 
             // Hit ground

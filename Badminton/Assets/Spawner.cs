@@ -72,8 +72,7 @@ public class Spawner : MonoBehaviour
         transform.position = new Vector3(transform.position.x, height, transform.position.z);
 
         // Instantiate the projectile at the position and rotation of this transform
-        Ball clone;
-        clone = Instantiate(ball, transform.position, transform.rotation * dir);
+        Ball clone = Instantiate(ball, transform.position, transform.rotation * dir);
         clone.moveSpd = spd;
         clone.name = shot.Name;
         clone.tag = "BallDynamic";

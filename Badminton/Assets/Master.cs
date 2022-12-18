@@ -44,6 +44,9 @@ public class Master : MonoBehaviour
     public LineRenderer lineSpeed;
     public LineRenderer lineCurve;
 
+    // GUI
+    public UIMarker hitMarker;
+
     // Database - Shot types
     public List<ShotData> Shots;
 

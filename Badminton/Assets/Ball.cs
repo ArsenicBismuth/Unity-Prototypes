@@ -139,11 +139,19 @@ public class Ball : MonoBehaviour
         }
         lastHit = Time.time;
 
-        // Contact racket, get its info
-        Draw(contact.GetComponent<Head>().dir, contact.GetComponent<Head>().speed);
+        // Contact racket, check if in valid area
+        Head racket = contact.GetComponent<Head>();
+        bool valid = racket.CheckHit(transform.position);
+
+        // Mark the ball in head's local transform
+        Vector3 relative = contact.transform.InverseTransformPoint(transform.position);
+        master.hitMarker.Mark(relative);
+
+        // Valid, get hit info
+        if (valid) Draw(racket.dir, racket.speed);
 
         // For dynamic ones
-        if (moveSpd > 0) {
+        if (moveSpd > 0 && valid) {
 
             // Destroy on hit & add score
             master.hit += 1;

@@ -10,6 +10,9 @@ public class Head : MonoBehaviour
     public Vector3 dir;
     public bool master = true;
 
+    // Proper hit area
+    public Bounds valid;
+
     private Quaternion pRot;
     private Vector3 pPos;
 
@@ -74,5 +77,9 @@ public class Head : MonoBehaviour
             frame++;
         }
 
+    }
+
+    public bool CheckHit(Vector3 pos) {
+        return valid.Contains(pos);
     }
 }

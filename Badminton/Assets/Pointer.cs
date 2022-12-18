@@ -8,7 +8,7 @@ public class Pointer : MonoBehaviour
 {
 
     // Parameters
-    private int layerMask = 1 << 7; // Bit shift to get a bit mask, only Clickable
+    private int layerMask = 1 << 7 | 1 << 5; // Bit shift to get a bit mask, clickable & UI
     private int distance = 10;
     
     public XRNode inputSource;
@@ -22,6 +22,7 @@ public class Pointer : MonoBehaviour
     private InputState primaryButton;
 
     // Line pointer
+    public GameObject sprite;
     LineRenderer line;
     Vector3[] points;
 
@@ -52,12 +53,16 @@ public class Pointer : MonoBehaviour
         if (primaryButton.state) line.enabled = true;
         else line.enabled = false;
 
-        // Does the ray intersect only object in that layer
+        // Does the ray intersect object in specific layers
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distance, layerMask)) {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
 
+            // Hover - send message & draw line till contact, draw sprite
             hit.transform.gameObject.SendMessage("Hover", null, SendMessageOptions.DontRequireReceiver);
-            // Master.Log("Hover", hit.transform.gameObject.name);
+
+            line.SetPosition(1, Vector3.forward * hit.distance);
+            sprite.SetActive(true);
+            sprite.transform.position = hit.point;
 
             // Click while on hover - Trigger button (index)
             if (triggerButton.up) {
@@ -72,8 +77,21 @@ public class Pointer : MonoBehaviour
                 }
                 
             }
+        } else {
+
+            // Draw line till max
+            line.SetPosition(1, Vector3.forward * distance);
+            sprite.SetActive(false);
+
         }
 
+    }
+
+    void LateUpdate()
+    {
+        if (sprite.activeSelf) {
+            sprite.transform.forward = Camera.main.transform.forward;
+        }
     }
 
     InputState CheckInput(InputFeatureUsage<bool> input, InputState output) {

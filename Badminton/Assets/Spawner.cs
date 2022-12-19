@@ -107,14 +107,16 @@ public class Spawner : MonoBehaviour
 
     // UI - Add plan based on current shot (menu) & target
     public void AddPlan() {
-        ShotData child = master.Shots[ishot];
-        child.SetTarget(transform, target.transform);
-        plan.Add(shot);
+        ShotData select = master.Shots[ishot];
+        select.SetTarget(transform, target.transform);
+        plan.Add(select);
+        iplan = 0;
         PrintPlan();
     }
 
     public void RemovePlan() {
         plan.RemoveAt(plan.Count - 1);
+        iplan = 0;
         PrintPlan();
     }
 

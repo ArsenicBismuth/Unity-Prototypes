@@ -38,6 +38,7 @@ public class Button : MonoBehaviour
         onHover = true;
     }
 
+    [ContextMenu("Click")]  // Can be run from inspector (context menu)
     void Click() {
         onClick?.Invoke();
         clicked = Time.time;

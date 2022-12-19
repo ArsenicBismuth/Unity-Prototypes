@@ -33,6 +33,7 @@ public class Master : MonoBehaviour
     // Toggle
     public bool spawner = false;
     public bool enemyMove = true;
+    public bool data = true;
     private GameObject[] statics;
 
     // Scoring

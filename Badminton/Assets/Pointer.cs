@@ -7,6 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class Pointer : MonoBehaviour
 {
 
+    public Master master;
+
     // Parameters
     private int layerMask = 1 << 7 | 1 << 5; // Bit shift to get a bit mask, clickable & UI
     private int distance = 10;
@@ -20,6 +22,7 @@ public class Pointer : MonoBehaviour
     };
     private InputState triggerButton;
     private InputState primaryButton;
+    private InputState secondaryButton;
 
     // Line pointer
     public GameObject sprite;
@@ -46,12 +49,15 @@ public class Pointer : MonoBehaviour
 
         triggerButton = CheckInput(UnityEngine.XR.CommonUsages.triggerButton, triggerButton);
         primaryButton = CheckInput(UnityEngine.XR.CommonUsages.primaryButton, primaryButton);
+        secondaryButton = CheckInput(UnityEngine.XR.CommonUsages.secondaryButton, secondaryButton);
         
         // Raycast to interact with buttons
         RaycastHit hit;
 
-        if (primaryButton.state) line.enabled = true;
+        if (primaryButton.state) line.enabled = true;       // Show line
         else line.enabled = false;
+
+        if (secondaryButton.up) master.data = !master.data;   // Pause/unpause data logging
 
         // Does the ray intersect object in specific layers
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distance, layerMask)) {

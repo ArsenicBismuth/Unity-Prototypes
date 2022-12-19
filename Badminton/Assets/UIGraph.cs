@@ -5,6 +5,8 @@ using UnityEngine;
 public class UIGraph : MonoBehaviour
 {
 
+    public Master master;
+    
     // Note, add component, not object (so must manually drag-drop component)
     public Component comp;
     public string param;
@@ -40,6 +42,8 @@ public class UIGraph : MonoBehaviour
     }
 
     void Update() {
+        if (!master.data) return;
+
         float value = (float) GetPropertyValue(comp, param);
         AddPoint(value);
     }

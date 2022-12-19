@@ -5,6 +5,10 @@ using UnityEngine;
 public class UIGraph : MonoBehaviour
 {
 
+    // Note, add component, not object (so must manually drag-drop component)
+    public Component comp;
+    public string param;
+
     public int N = 100;
     private Vector3[] points;
 
@@ -33,6 +37,17 @@ public class UIGraph : MonoBehaviour
 
         line.positionCount = N;
         line.SetPositions(points);
+    }
+
+    void Update() {
+        float value = (float) GetPropertyValue(comp, param);
+        AddPoint(value);
+    }
+
+    // Get arbitrary property using reflection
+    public object GetPropertyValue(object t, string propertyName) {
+        object val = t.GetType().GetField(propertyName).GetValue(t);
+        return val;
     }
 
     public void AddPoint(float data)

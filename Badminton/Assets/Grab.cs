@@ -23,6 +23,7 @@ public class Grab : MonoBehaviour
     private Transform target;
 
     // Click feedback
+    private MeshRenderer renderer;
     private Material matOrig;
     public Material matClick;
 
@@ -35,7 +36,8 @@ public class Grab : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if (!rb) initPos = target.transform.position;
 
-        matOrig = GetComponent<MeshRenderer>().material;
+        renderer = GetComponent<MeshRenderer>();
+        matOrig = renderer.material;
     }
 
     // Update is called once per frame
@@ -43,8 +45,8 @@ public class Grab : MonoBehaviour
         // Follow hand with an offset
         if (grabbed) target.position = hand.transform.position + hand.transform.TransformDirection(Vector3.forward) * 1;
 
-        if (onHover) GetComponent<MeshRenderer>().material = matClick;
-        else GetComponent<MeshRenderer>().material = matOrig;
+        if (onHover) renderer.material = matClick;
+        else renderer.material = matOrig;
 
         // Keep onHover false by default, unless overwritten
         onHover = false;

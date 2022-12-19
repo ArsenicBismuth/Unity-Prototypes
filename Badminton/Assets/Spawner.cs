@@ -105,12 +105,9 @@ public class Spawner : MonoBehaviour
         Master.Log("CD", spawnCD);
     }
 
-    // UI - Add plan based on current shot & target
+    // UI - Add plan based on current shot (menu) & target
     public void AddPlan() {
-        // Stop spawner to prevent conflict
-        if (master.spawner) master.ToggleSpawner();
-        
-        ShotData child = shot;
+        ShotData child = master.Shots[ishot];
         child.SetTarget(transform, target.transform);
         plan.Add(shot);
         PrintPlan();

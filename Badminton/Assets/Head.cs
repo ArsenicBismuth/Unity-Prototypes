@@ -45,17 +45,18 @@ public class Head : MonoBehaviour
 
             // Create duplicate of itself inbetween
             if (diff.magnitude > 0) {
-                var n = clone+1;
+                int n = clone+1;
                 for (int i=1; i<n; i++) {
 
                     // Interpolate spherically between the two
                     Vector3 pos = Vector3.Slerp(pPos, transform.position, (float)i/n);
                     Quaternion rot = Quaternion.Slerp(pRot, transform.rotation, (float)i/n);
 
-                    var obj = Instantiate(gameObject, pos, rot);
-                    obj.GetComponent<Head>().master = false;
-                    obj.GetComponent<Head>().speed = speed;
-                    obj.GetComponent<Head>().dir = dir;
+                    GameObject obj = Instantiate(gameObject, pos, rot);
+                    Head head = obj.GetComponent<Head>();
+                    head.master = false;
+                    head.speed = speed;
+                    head.dir = dir;
                 }
             }
 

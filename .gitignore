@@ -8,3 +8,11 @@
 Bronchoscopy/Assets/Blender - Shortcut.lnk.meta
 
 *.dwlt
+
+Bronchoscopy/.vscode/
+
+*.csproj
+
+*.sln
+
+Build/

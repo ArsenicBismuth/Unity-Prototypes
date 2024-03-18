@@ -18,7 +18,7 @@ public class Movement : MonoBehaviour
         character = GetComponent<CharacterController>();
     }
     
-    void Update()
+    void FixedUpdate()
     {
         // Rotate according to mouse, FPS
         rot.y += Input.GetAxis("Mouse X");
@@ -34,8 +34,8 @@ public class Movement : MonoBehaviour
         // Camera.main.transform.localRotation = Quaternion.Euler(rot.x * lookSpeed, 0, 0);
 
         // Move
-        trans = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        Debug.Log(transform.rotation);
-        character.Move((transform.rotation * trans) * Time.deltaTime * speed);
+        Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 movement = transform.TransformDirection(direction);
+        character.Move(movement * Time.deltaTime * speed);
     }
 }

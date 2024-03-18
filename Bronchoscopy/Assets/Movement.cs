@@ -23,13 +23,16 @@ public class Movement : MonoBehaviour
     void FixedUpdate()
     {
         // Rotate according to mouse or right joystick, FPS
-        float vertical, horizontal;
+        float vertical = 0f;
+        float horizontal = 0f;
         if (joystickCam.Horizontal != 0 || joystickCam.Vertical != 0) {
             vertical = -joystickCam.Vertical;
             horizontal = joystickCam.Horizontal;
         } else {
-            vertical = -Input.GetAxis("Mouse Y");
-            horizontal = Input.GetAxis("Mouse X");
+            if (Input.mousePresent) {
+                vertical = -Input.GetAxis("Mouse Y");
+                horizontal = Input.GetAxis("Mouse X");
+            }
         }
         rot.y += horizontal;
         rot.x += vertical;

@@ -462,7 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af65c00285318e244884a9588882c2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.3
+  speed: 0.1
   lookSpeed: 1
   joystickMove: {fileID: 527071875}
   joystickCam: {fileID: 1380486950}

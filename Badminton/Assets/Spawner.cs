@@ -59,7 +59,7 @@ public class Spawner : MonoBehaviour
             iplan++;
             if (iplan >= plan.Count) iplan = 0;
         } else {
-            // Target's position to set as y-rot reference, realtime for non-plan mode
+            // Cylinder target will set direction (y-axis rotation of launch vector)
             shot.SetTarget(transform, target.transform);
         }
 
@@ -110,8 +110,9 @@ public class Spawner : MonoBehaviour
     public void AddPlan() {
         ShotData select = master.Shots[ishot];
         
-        // Create new target cylinder
-        GameObject targetClone = Instantiate(targetPlan, target.transform.position, target.transform.rotation);
+        // Create new target cone for this shot, above main cylinder so we can see it
+        Vector3 pos = new(target.transform.position.x, target.transform.position.y + 0.2f, target.transform.position.z);
+        GameObject targetClone = Instantiate(targetPlan, pos, target.transform.rotation);
         select.SetTarget(transform, targetClone.transform);
         plan.Add(select);
         iplan = 0;

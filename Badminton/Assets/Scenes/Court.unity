@@ -2572,6 +2572,7 @@ MonoBehaviour:
   valid:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
+  initialPoolSize: 10
 --- !u!65 &271810418
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17039,6 +17040,7 @@ MonoBehaviour:
   valid:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
+  initialPoolSize: 10
 --- !u!65 &1479900415
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -21893,7 +21895,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 2, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1983297359
 MeshRenderer:
@@ -21902,7 +21904,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1983297356}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -21968,6 +21970,7 @@ MonoBehaviour:
   valid:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 10}
+  initialPoolSize: 10
 --- !u!1 &2005430061
 GameObject:
   m_ObjectHideFlags: 0

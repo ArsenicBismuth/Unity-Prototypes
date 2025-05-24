@@ -62,6 +62,11 @@ public class Master : MonoBehaviour
         Unity.XR.Oculus.Performance.TrySetDisplayRefreshRate(RefreshRate);
         UnityEngine.XR.XRSettings.eyeTextureResolutionScale = ResScale;
 
+        // Limit to this FPS on editor
+        #if UNITY_EDITOR
+            Application.targetFrameRate = RefreshRate;
+        #endif
+
         // Find all static balls on start, can't use "Find" on inactive obj
         statics = GameObject.FindGameObjectsWithTag("BallStatic");
 
@@ -77,9 +82,10 @@ public class Master : MonoBehaviour
 
         if (spawn > 0) score = hit*100/spawn;
 
-        debugTxt.text = fps +"\n"+
-            pfps +" "+ timestep +"\n"+
-            ballSpd +"\n"+ headSpd +"\n\n"+
+        debugTxt.text = fps.ToString("000") +"\n"+
+            pfps +" "+ timestep.ToString("0.00") +"\n"+
+            ballSpd.ToString("0.00") +"\n"+
+            headSpd.ToString("0.00") +"\n\n"+
             score+"%";
 
         iter++;

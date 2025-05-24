@@ -2,20 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIGraph : MonoBehaviour
+public class UIGraphFPS : MonoBehaviour
 {
 
     public Master master;
-    
-    // Note, add component, not object (so must manually drag-drop component)
-    public Component comp;
-    public string param; // Property to track
 
     public int N = 100;
     private Vector3[] points;
 
     // Data range for normalization
-    public float max = 100;
+    public float max = 130;
     public float min = 0;
 
     // Maximum size from line renderer's 2nd point
@@ -44,7 +40,7 @@ public class UIGraph : MonoBehaviour
     void Update() {
         if (!master.data) return;
 
-        float value = (float) GetPropertyValue(comp, param);
+        float value = (int)(1f / Time.unscaledDeltaTime);
         AddPoint(value);
     }
 

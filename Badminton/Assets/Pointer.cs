@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
-using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem; // Added for new Input System
 
 public class Pointer : MonoBehaviour
 {
@@ -12,17 +11,12 @@ public class Pointer : MonoBehaviour
     // Parameters
     private int layerMask = 1 << 7 | 1 << 5; // Bit shift to get a bit mask, clickable & UI
     private int distance = 10;
-    
-    public XRNode inputSource;
-    private InputDevice device;
 
-    private struct InputState { 
-        public bool state, prev;
-        public bool up, down;
-    };
-    private InputState triggerButton;
-    private InputState primaryButton;
-    private InputState secondaryButton;
+    // New Input System Actions
+    [Tooltip("Action for grab/click")]
+    public InputActionReference primaryAction;
+    public InputActionReference showLineAction;
+    public InputActionReference toggleLogAction;
 
     // Line pointer
     public GameObject sprite;
@@ -32,8 +26,6 @@ public class Pointer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        device = InputDevices.GetDeviceAtXRNode(inputSource);
-
         // Line from itself (using local space)
         line = gameObject.GetComponent<LineRenderer>();
         points = new Vector3[2];
@@ -41,23 +33,23 @@ public class Pointer : MonoBehaviour
         points[1] = new Vector3(0, 0, distance);
         line.SetPositions(points);
         line.enabled = false;
+
+        // Enable actions
+        primaryAction.action.Enable();
+        showLineAction.action.Enable();
+        toggleLogAction.action.Enable();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        triggerButton = CheckInput(UnityEngine.XR.CommonUsages.triggerButton, triggerButton);
-        primaryButton = CheckInput(UnityEngine.XR.CommonUsages.primaryButton, primaryButton);
-        secondaryButton = CheckInput(UnityEngine.XR.CommonUsages.secondaryButton, secondaryButton);
-        
         // Raycast to interact with buttons
         RaycastHit hit;
 
-        if (primaryButton.state) line.enabled = true;       // Show line
+        if (showLineAction.action.IsPressed()) line.enabled = true;       // Show line
         else line.enabled = false;
 
-        if (secondaryButton.up) master.data = !master.data;   // Pause/unpause data logging
+        if (toggleLogAction.action.WasReleasedThisFrame()) master.data = !master.data;   // Pause/unpause data logging
 
         // Does the ray intersect object in specific layers
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distance, layerMask)) {
@@ -71,7 +63,7 @@ public class Pointer : MonoBehaviour
             sprite.transform.position = hit.point;
 
             // Click while on hover - Trigger button (index)
-            if (triggerButton.up) {
+            if (primaryAction.action.WasReleasedThisFrame()) {
 
                 var ui = hit.transform.gameObject.GetComponent<UnityEngine.UI.Button>();
                 if (ui != null) {
@@ -98,33 +90,6 @@ public class Pointer : MonoBehaviour
         if (sprite.activeSelf) {
             sprite.transform.forward = Camera.main.transform.forward;
         }
-    }
-
-    InputState CheckInput(InputFeatureUsage<bool> input, InputState output) {
-
-        // Try to check value
-        bool state;
-        if (device.TryGetFeatureValue(input, out state)) {
-            // Store only if valid
-            output.state = state;
-        } else {
-            // Master.Log("Input: Fail");
-        }
-
-        // Check state change
-        if (output.state != output.prev) {
-            if (output.state) output.down = true;
-            else output.up = true;
-        } else {
-            output.up = false;
-            output.down = false;
-        }
-        output.prev = output.state;
-
-        // For debug, defaults to LCtrl or click
-        if (Input.GetButton("Fire1")) output.up = true;
-
-        return output;
     }
 
 }

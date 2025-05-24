@@ -30871,7 +30871,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   master: {fileID: 671983132}
-  inputSource: 5
+  primaryAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  showLineAction: {fileID: 187161793506945269, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  toggleLogAction: {fileID: 7490538216831076269, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
   sprite: {fileID: 782628375}
 --- !u!120 &8366103833596723361
 LineRenderer:

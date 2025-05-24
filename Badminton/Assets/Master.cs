@@ -13,7 +13,7 @@ public class Master : MonoBehaviour
     public Text debugTxt;
     public Text consoleTxt;
     public Head racket;
-    public Cam hmd;
+    // public Cam hmd;
     public GameObject court;
     private int fps;        // Visual
     private int timestep;   // Physics

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.Rendering;
 
 public class Head : MonoBehaviour
 {
@@ -15,11 +16,11 @@ public class Head : MonoBehaviour
     public Vector3 dir;
     public bool master = true;
 
-    // Proper hit area, 0.5 for 1 total, and z=10 coz we knew it's a hit from collider
-    public Bounds valid;
 
     private Quaternion pRot;
     private Vector3 pPos;
+
+    private Vector3 pColliderPos;
     private bool firstMasterUpdateLogicRun = true;
     
     // Object pooling for clones
@@ -32,6 +33,8 @@ public class Head : MonoBehaviour
     {
         pPos = transform.position;
         pRot = transform.rotation;
+
+        pColliderPos = transform.GetChild(0).position;
 
         if (master)
         {
@@ -93,24 +96,26 @@ public class Head : MonoBehaviour
                 firstMasterUpdateLogicRun = false;
             }
 
-            Vector3 currentPosition = transform.position;
-            Quaternion currentRotation = transform.rotation;
-            Vector3 diff = currentPosition - pPos;
+            // Parameter of racket swing, based on racket head (this child)
+            Vector3 colliderPos = transform.GetChild(0).position;
+            Vector3 diff = colliderPos - pColliderPos;
 
-            if (Time.deltaTime > 0.00001f)
-            {
+            if (Time.deltaTime > 0.00001f) {
                 speed = diff.magnitude / Time.deltaTime;
             } else {
                 speed = 0f;
             }
             
-            if (diff.sqrMagnitude > 0.00001f)
-            {
+            if (diff.sqrMagnitude > 0.00001f) {
                 if (Vector3.Dot(transform.forward, diff.normalized) >= 0)
                     dir = transform.forward;
                 else
                     dir = -1 * transform.forward;
             }
+
+            // Positioning of clones, based on self
+            Vector3 currentPosition = transform.position;
+            Quaternion currentRotation = transform.rotation;
 
             if (diff.sqrMagnitude > 0.00001f) {
                 int n = clone + 1;
@@ -138,6 +143,8 @@ public class Head : MonoBehaviour
 
             pPos = currentPosition;
             pRot = currentRotation;
+
+            pColliderPos = colliderPos;
         }
     }
 
@@ -159,16 +166,14 @@ public class Head : MonoBehaviour
         }
     }
 
-    // Check a position if it's within valid hit zone
-    public (bool, Vector3) CheckHit(Vector3 contact) {
-        
-        // Check contact in head's local transform, determine validity
-        Vector3 relative = transform.InverseTransformPoint(contact);
-        bool inside = valid.Contains(relative);
-        
-        // Neutralize against scaling
-        relative = Vector3.Scale(relative, transform.localScale);
+    public void ToggleVisibility() {
+        // Toggle visibility of the child
+        bool visible = transform.GetChild(0).GetComponent<MeshRenderer>().enabled;
+        transform.GetChild(0).GetComponent<MeshRenderer>().enabled = !visible;
 
-        return (inside, relative);
+        // Also do the clones
+        foreach (Head clone in clonePool) {
+            clone.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = !visible;
+        }
     }
 }

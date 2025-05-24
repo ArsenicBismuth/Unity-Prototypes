@@ -140,7 +140,7 @@ public class Ball : MonoBehaviour
         lastHit = Time.time;
 
         // Contact racket, check if in valid area
-        Head racket = contact.GetComponent<Head>();
+        HeadCollider racket = contact.GetComponent<HeadCollider>();
         if (!racket) return;
 
         // Mark the ball in head's local transform
@@ -148,7 +148,7 @@ public class Ball : MonoBehaviour
         master.hitMarker.Mark(relative, valid);
 
         // Valid, get hit info
-        if (valid) Draw(racket.dir, racket.speed);
+        if (valid) Draw(racket.GetDir(), racket.GetSpeed());
 
         // For dynamic ones
         if (moveSpd > 0 && valid) {

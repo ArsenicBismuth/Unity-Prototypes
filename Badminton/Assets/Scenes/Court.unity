@@ -9711,7 +9711,8 @@ MonoBehaviour:
     sideMax: 0
     hMin: 0
     hMax: 0
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: Net
     spdMin: 15
     spdMax: 25
@@ -9721,7 +9722,8 @@ MonoBehaviour:
     sideMax: 10
     hMin: 1.7
     hMax: 1.8
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: PaperClear
     spdMin: 35
     spdMax: 45
@@ -9731,7 +9733,8 @@ MonoBehaviour:
     sideMax: 0
     hMin: 2.5
     hMax: 2.8
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: PaperSmash
     spdMin: 65
     spdMax: 75
@@ -9741,7 +9744,8 @@ MonoBehaviour:
     sideMax: 5
     hMin: 3
     hMax: 3.2
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: PaperDrop
     spdMin: 20
     spdMax: 30
@@ -9751,7 +9755,8 @@ MonoBehaviour:
     sideMax: 5
     hMin: 3
     hMax: 3.2
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: SmashPro
     spdMin: 80
     spdMax: 90
@@ -9761,7 +9766,8 @@ MonoBehaviour:
     sideMax: 2
     hMin: 3
     hMax: 3.2
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: SmashAdv
     spdMin: 45
     spdMax: 53
@@ -9771,7 +9777,8 @@ MonoBehaviour:
     sideMax: 2
     hMin: 2.7
     hMax: 3
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: DropAdv
     spdMin: 23
     spdMax: 25
@@ -9781,7 +9788,8 @@ MonoBehaviour:
     sideMax: 5
     hMin: 2.7
     hMax: 3
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: ClearAdv
     spdMin: 30
     spdMax: 35
@@ -9791,7 +9799,8 @@ MonoBehaviour:
     sideMax: 2
     hMin: 2.1
     hMax: 2.5
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   - Name: Drive
     spdMin: 45
     spdMax: 53
@@ -9801,7 +9810,8 @@ MonoBehaviour:
     sideMax: 2
     hMin: 2.1
     hMax: 2.5
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
 --- !u!4 &671983133
 Transform:
   m_ObjectHideFlags: 0
@@ -13007,6 +13017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   master: {fileID: 671983132}
   target: {fileID: 0}
+  targetPlan: {fileID: 0}
   sphere: {fileID: 1625543688}
   ball: {fileID: 636956842}
   spawnCD: 0.4
@@ -13020,7 +13031,8 @@ MonoBehaviour:
     sideMax: 0
     hMin: 0
     hMax: 0
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   plan: []
   shotTxt: {fileID: 0}
   cooldownTxt: {fileID: 0}
@@ -14683,6 +14695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   master: {fileID: 671983132}
   target: {fileID: 1965059962}
+  targetPlan: {fileID: 355305576}
   sphere: {fileID: 640835499}
   ball: {fileID: 636956842}
   spawnCD: 0.6
@@ -14696,7 +14709,8 @@ MonoBehaviour:
     sideMax: 5
     hMin: 2.2
     hMax: 2.5
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   plan: []
   shotTxt: {fileID: 3208692539162197557}
   cooldownTxt: {fileID: 6487887499865049389}
@@ -18243,6 +18257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   master: {fileID: 671983132}
   target: {fileID: 0}
+  targetPlan: {fileID: 0}
   sphere: {fileID: 255728740}
   ball: {fileID: 636956842}
   spawnCD: 0.6
@@ -18256,7 +18271,8 @@ MonoBehaviour:
     sideMax: 10
     hMin: 1.7
     hMax: 1.8
-    target: 0
+    source: {fileID: 0}
+    target: {fileID: 0}
   plan: []
   shotTxt: {fileID: 0}
   cooldownTxt: {fileID: 0}

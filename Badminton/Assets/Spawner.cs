@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour
     
     public Master master;
     public GameObject target;
+    public GameObject targetPlan;
     public GameObject sphere;
     public Ball ball;
     public float spawnCD = 0.4f;    // Cooldown in seconds
@@ -108,7 +109,10 @@ public class Spawner : MonoBehaviour
     // UI - Add plan based on current shot (menu) & target
     public void AddPlan() {
         ShotData select = master.Shots[ishot];
-        select.SetTarget(transform, target.transform);
+        
+        // Create new target cylinder
+        GameObject targetClone = Instantiate(targetPlan, target.transform.position, target.transform.rotation);
+        select.SetTarget(transform, targetClone.transform);
         plan.Add(select);
         iplan = 0;
         PrintPlan();

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public class Head : MonoBehaviour
 {
@@ -18,6 +20,7 @@ public class Head : MonoBehaviour
 
     private Quaternion pRot;
     private Vector3 pPos;
+    private bool firstMasterUpdateLogicRun = true;
     
     // Start is called before the first frame update
     void Start()
@@ -26,30 +29,53 @@ public class Head : MonoBehaviour
         pRot = transform.rotation;
     }
 
-    // Update because speed calc is wonky with FixedUpdate at low deltaTime
-    void Update()
+    void OnEnable()
     {
-        
-        // Only if main object
-        if (master) {
-            // Get speed
-            Vector3 diff = transform.position - pPos;
-            speed = diff.magnitude / Time.deltaTime;
-            
-            // Get direction. Ignore slice: Always head's dir
-            if (Vector3.Dot(transform.forward, diff) >= 0)
-                // Stroke is along head's normal
-                dir = transform.forward;
-            else
-                // Stroke is opposing head's normal
-                dir = -1 * transform.forward;
+        if (master)
+        {
+            InputSystem.onAfterUpdate += MasterUpdateLogic;
+            firstMasterUpdateLogicRun = true;
+        }
+    }
 
-            // Create duplicate of itself inbetween
-            if (diff.magnitude > 0) {
+    void OnDisable()
+    {
+        if (master)
+        {
+            InputSystem.onAfterUpdate -= MasterUpdateLogic;
+        }
+    }
+
+    void MasterUpdateLogic()
+    {
+        if (InputState.currentUpdateType == InputUpdateType.BeforeRender)
+        {
+            if (firstMasterUpdateLogicRun)
+            {
+                firstMasterUpdateLogicRun = false;
+            }
+
+            Vector3 diff = transform.position - pPos;
+
+            if (Time.deltaTime > 0.00001f)
+            {
+                speed = diff.magnitude / Time.deltaTime;
+            } else {
+                speed = 0f;
+            }
+            
+            if (diff.sqrMagnitude > 0.00001f)
+            {
+                if (Vector3.Dot(transform.forward, diff.normalized) >= 0)
+                    dir = transform.forward;
+                else
+                    dir = -1 * transform.forward;
+            }
+
+            if (diff.sqrMagnitude > 0.00001f) {
                 int n = clone+1;
                 for (int i=1; i<n; i++) {
 
-                    // Interpolate spherically between the two
                     Vector3 pos = Vector3.Slerp(pPos, transform.position, (float)i/n);
                     Quaternion rot = Quaternion.Slerp(pRot, transform.rotation, (float)i/n);
 
@@ -63,11 +89,16 @@ public class Head : MonoBehaviour
 
             pPos = transform.position;
             pRot = transform.rotation;
+        }
+    }
 
-        // The clones
-        } else {
-            
+    // Update for clone-specific logic
+    void Update()
+    {
+        // Only if a clone
+        if (!master) {
             // Update dir to accurately reflect slerp
+            // 'dir' was set by the master during instantiation
             if (Vector3.Dot(transform.forward, dir) >= 0)
                 dir = transform.forward;
             else
@@ -78,7 +109,6 @@ public class Head : MonoBehaviour
                 Destroy(gameObject);
             cloneFrameDuration--;
         }
-
     }
 
     // Check a position if it's within valid hit zone

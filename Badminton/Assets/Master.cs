@@ -33,7 +33,9 @@ public class Master : MonoBehaviour
     // Toggle
     public bool spawner = false;
     public bool enemyMove = true;
-    public bool data = true;
+
+    [Tooltip("Stats & graph. Note: Don't start with this on, it will kill FPS for some reason.")]
+    public bool data = false;
     private GameObject[] statics;
 
     // Scoring
@@ -71,8 +73,16 @@ public class Master : MonoBehaviour
         statics = GameObject.FindGameObjectsWithTag("BallStatic");
 
         consoleLog = consoleTxt;
+        
+        // Delayed start routine
+        StartCoroutine(EnableDataAfterDelay());
     }
-    
+
+    IEnumerator EnableDataAfterDelay() {
+        yield return new WaitForSeconds(1f);
+        data = true; // Somehow enabling this on runtime has better FPS, it'd tank FPS if enabled by default
+    }
+
     void Update()
     {
         // Update GUI

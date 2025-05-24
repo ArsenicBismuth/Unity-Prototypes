@@ -19718,7 +19718,7 @@ MonoBehaviour:
     to select shot type.\n2. Move target cylinder to set direction.\n3. [+] to add
     current shot & target to plan.\n4. Move target & change shot as needed.\n5. [+]
     again to add the new shot.\n6. You can change the target of prev shots\n    by
-    moving the smaller target cylinder.\n7. Clear plan to play in single shot mode. "
+    moving the new cone target.\n7. Clear plan to play in single shot mode. "
 --- !u!222 &1783337583
 CanvasRenderer:
   m_ObjectHideFlags: 0

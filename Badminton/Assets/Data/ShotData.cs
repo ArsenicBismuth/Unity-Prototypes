@@ -17,6 +17,13 @@ public class ShotData
     [HideInInspector]
     public Transform target;
 
+    public ShotData Clone() {
+        ShotData clone = (ShotData)this.MemberwiseClone();
+        clone.source = null;
+        clone.target = null;
+        return clone;
+    }
+
     public float GetSpeed() {
         return Random.Range(spdMin, spdMax);
     }
@@ -33,7 +40,7 @@ public class ShotData
         return Random.Range(hMin, hMax);
     }
 
-    public void SetTarget( Transform source, Transform dest) {
+    public void SetTarget(Transform source, Transform dest) {
         this.source = source;
         this.target = dest;
     }

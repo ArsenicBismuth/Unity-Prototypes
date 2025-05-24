@@ -24,7 +24,7 @@ public class Spawner : MonoBehaviour
     // Shot UI
     public Text shotTxt;
     public Text cooldownTxt;
-    private int ishot = 0;   // Index for UI
+    private int ishot = 1;   // Index for UI
     
     // Plan UI
     public Text planTxt;
@@ -108,7 +108,7 @@ public class Spawner : MonoBehaviour
 
     // UI - Add plan based on current shot (menu) & target
     public void AddPlan() {
-        ShotData select = master.Shots[ishot];
+        ShotData select = shot.Clone();
         
         // Create new target cone for this shot, above main cylinder so we can see it
         Vector3 pos = new(target.transform.position.x, target.transform.position.y + 0.2f, target.transform.position.z);

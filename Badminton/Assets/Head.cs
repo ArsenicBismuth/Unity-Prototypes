@@ -6,6 +6,9 @@ public class Head : MonoBehaviour
 {
     
     public int clone = 5;
+
+    [Tooltip("How long the clone lasts, means next frame after created")]
+    public float cloneFrameDuration = 1;
     public float speed;
     public Vector3 dir;
     public bool master = true;
@@ -15,8 +18,6 @@ public class Head : MonoBehaviour
 
     private Quaternion pRot;
     private Vector3 pPos;
-
-    private int frame = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -72,10 +73,10 @@ public class Head : MonoBehaviour
             else
                 dir = -1 * transform.forward;
 
-            // Remove itself in next frame (or instantly)
-            if (frame >= 0)
+            // Remove itself after N frames (0 means next frame)
+            if (cloneFrameDuration <= 0)
                 Destroy(gameObject);
-            frame++;
+            cloneFrameDuration--;
         }
 
     }

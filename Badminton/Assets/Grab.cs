@@ -7,7 +7,7 @@ public class Grab : MonoBehaviour
 {
     // Handle grabbing an object, moving its parent (since the mesh/collider is often the child of the actual object)
 
-    public GameObject hand;
+    private GameObject hand;
     public bool grabbed = false;
 
     // The function to be called
@@ -38,6 +38,9 @@ public class Grab : MonoBehaviour
 
         renderer = GetComponent<MeshRenderer>();
         matOrig = renderer.material;
+
+        // Find hand
+        hand = GameObject.Find("/XR Origin (XR Rig)/Camera Offset/Right Controller");
     }
 
     // Update is called once per frame

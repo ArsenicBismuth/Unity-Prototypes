@@ -93,7 +93,7 @@ public class Master : MonoBehaviour
         if (spawn > 0) score = hit*100/spawn;
 
         debugTxt.text = fps.ToString("000") +"\n"+
-            pfps +" "+ timestep.ToString("0.00") +"\n"+
+            pfps +" "+ timestep.ToString("0.000") +"\n"+
             ballSpd.ToString("0.00") +"\n"+
             headSpd.ToString("0.00") +"\n\n"+
             score+"%";

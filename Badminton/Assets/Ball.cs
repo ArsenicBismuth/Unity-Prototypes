@@ -155,7 +155,7 @@ public class Ball : MonoBehaviour
         if (!racket) return;
 
         // Mark the ball in head's local transform
-        (bool valid, Vector3 relative) = racket.CheckHit(transform.position);
+        (bool valid, Vector3 relative) = racket.CheckHit(rb.position);
         master.hitMarker.Mark(relative, valid);
 
         // Valid, get hit info

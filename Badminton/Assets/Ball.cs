@@ -45,6 +45,9 @@ public class Ball : MonoBehaviour
     public AudioClip audClip;
     float audVol = 0.5f;
 
+    // Contact point with racket
+    private Vector3 contactPoint;
+
     void Awake() {
         rb = GetComponent<Rigidbody>();
         vtr = terminal;
@@ -131,10 +134,8 @@ public class Ball : MonoBehaviour
             }
         }
     }
-    
-    private void OnTriggerEnter(Collider other)
-    {
 
+    private void OnTriggerEnter(Collider other) {
         contact = other.gameObject;
 
         // Hitting net
@@ -143,6 +144,12 @@ public class Ball : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+
+        contact = collision.gameObject;
 
         // Prevent multi contacts in short period
         if (lastHit + hitCD > Time.time) {
@@ -155,7 +162,8 @@ public class Ball : MonoBehaviour
         if (!racket) return;
 
         // Mark the ball in head's local transform
-        (bool valid, Vector3 relative) = racket.CheckHit(rb.position);
+        contactPoint = collision.contacts[0].point;
+        (bool valid, Vector3 relative) = racket.CheckHit(contactPoint);
         master.hitMarker.Mark(relative, valid);
 
         // Valid, get hit info
@@ -195,14 +203,14 @@ public class Ball : MonoBehaviour
         Vector3 endPos = startPos + (length * dir0);
         
         // Direct projection
-        lineLaser.transform.position = transform.position;
+        lineLaser.transform.position = contactPoint;
         lineLaser.SetPosition(0, startPos);
         lineLaser.SetPosition(1, endPos);
 
         
         // Intensity line - small strip of line
         Vector3 endPos2 = startPos + (speed/60 * dir0);
-        lineSpeed.transform.position = transform.position;
+        lineSpeed.transform.position = rb.position;
         lineSpeed.SetPosition(0, endPos2 - 0.05f*dir0);
         lineSpeed.SetPosition(1, endPos2);
     }

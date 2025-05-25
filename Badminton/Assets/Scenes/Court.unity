@@ -9384,37 +9384,70 @@ MonoBehaviour:
     hMax: 0
     source: {fileID: 0}
     target: {fileID: 0}
-  - Name: Net
-    spdMin: 15
-    spdMax: 25
-    upMin: -2
-    upMax: 5
-    sideMin: -10
-    sideMax: 10
-    hMin: 1.7
-    hMax: 1.8
-    source: {fileID: 0}
-    target: {fileID: 0}
-  - Name: PaperClear
-    spdMin: 35
-    spdMax: 45
-    upMin: 26
-    upMax: 32
-    sideMin: 0
-    sideMax: 0
-    hMin: 2.5
-    hMax: 2.8
-    source: {fileID: 0}
-    target: {fileID: 0}
-  - Name: PaperSmash
-    spdMin: 65
-    spdMax: 75
-    upMin: -10
-    upMax: -8
-    sideMin: -5
-    sideMax: 5
+  - Name: SmashPro
+    spdMin: 80
+    spdMax: 90
+    upMin: -5
+    upMax: -3
+    sideMin: -2
+    sideMax: 2
     hMin: 3
     hMax: 3.2
+    source: {fileID: 1207299286}
+    target: {fileID: 1965059967}
+  - Name: SmashAdv
+    spdMin: 45
+    spdMax: 53
+    upMin: -5
+    upMax: -3
+    sideMin: -2
+    sideMax: 2
+    hMin: 2.7
+    hMax: 3
+    source: {fileID: 1207299286}
+    target: {fileID: 1965059967}
+  - Name: DropAdv
+    spdMin: 23
+    spdMax: 25
+    upMin: -1
+    upMax: -1
+    sideMin: -2
+    sideMax: 2
+    hMin: 2.9
+    hMax: 3
+    source: {fileID: 1207299286}
+    target: {fileID: 1965059967}
+  - Name: ClearAdv
+    spdMin: 30
+    spdMax: 35
+    upMin: 20
+    upMax: 30
+    sideMin: -2
+    sideMax: 2
+    hMin: 2.1
+    hMax: 2.5
+    source: {fileID: 1207299286}
+    target: {fileID: 1965059967}
+  - Name: Drive
+    spdMin: 50
+    spdMax: 55
+    upMin: -1
+    upMax: 2
+    sideMin: -2
+    sideMax: 2
+    hMin: 2.1
+    hMax: 2.2
+    source: {fileID: 1207299286}
+    target: {fileID: 1965059967}
+  - Name: Net
+    spdMin: 15
+    spdMax: 16
+    upMin: -2
+    upMax: 5
+    sideMin: -2
+    sideMax: 2
+    hMin: 1.7
+    hMax: 1.8
     source: {fileID: 0}
     target: {fileID: 0}
   - Name: PaperDrop
@@ -9426,61 +9459,28 @@ MonoBehaviour:
     sideMax: 5
     hMin: 3
     hMax: 3.2
-    source: {fileID: 0}
-    target: {fileID: 0}
-  - Name: SmashPro
-    spdMin: 80
-    spdMax: 90
-    upMin: -5
-    upMax: -3
-    sideMin: -2
-    sideMax: 2
+    source: {fileID: 1207299286}
+    target: {fileID: 1965059967}
+  - Name: PaperSmash
+    spdMin: 65
+    spdMax: 75
+    upMin: -10
+    upMax: -8
+    sideMin: -5
+    sideMax: 5
     hMin: 3
     hMax: 3.2
     source: {fileID: 0}
     target: {fileID: 0}
-  - Name: SmashAdv
-    spdMin: 45
-    spdMax: 53
-    upMin: -5
-    upMax: -3
-    sideMin: -2
-    sideMax: 2
-    hMin: 2.7
-    hMax: 3
-    source: {fileID: 0}
-    target: {fileID: 0}
-  - Name: DropAdv
-    spdMin: 23
-    spdMax: 25
-    upMin: -3
-    upMax: -1
-    sideMin: -5
-    sideMax: 5
-    hMin: 2.7
-    hMax: 3
-    source: {fileID: 0}
-    target: {fileID: 0}
-  - Name: ClearAdv
-    spdMin: 30
-    spdMax: 35
-    upMin: 20
-    upMax: 30
-    sideMin: -2
-    sideMax: 2
-    hMin: 2.1
-    hMax: 2.5
-    source: {fileID: 0}
-    target: {fileID: 0}
-  - Name: Drive
-    spdMin: 45
-    spdMax: 53
-    upMin: 5
-    upMax: 10
-    sideMin: -2
-    sideMax: 2
-    hMin: 2.1
-    hMax: 2.5
+  - Name: PaperClear
+    spdMin: 35
+    spdMax: 45
+    upMin: 26
+    upMax: 32
+    sideMin: 0
+    sideMax: 0
+    hMin: 2.5
+    hMax: 2.8
     source: {fileID: 0}
     target: {fileID: 0}
 --- !u!4 &671983133

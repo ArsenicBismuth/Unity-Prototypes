@@ -118,8 +118,8 @@ public class Head : MonoBehaviour
             Quaternion currentRotation = transform.rotation;
 
             if (diff.sqrMagnitude > 0.00001f) {
-                int n = clone + 1;
-                for (int i = 1; i < n; i++) {
+                int n = clone;
+                for (int i = 0; i < n; i++) {
                     Vector3 pos = Vector3.Slerp(pPos, currentPosition, (float)i/n);
                     Quaternion rot = Quaternion.Slerp(pRot, currentRotation, (float)i/n);
 

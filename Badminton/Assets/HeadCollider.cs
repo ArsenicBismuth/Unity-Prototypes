@@ -8,7 +8,8 @@ public class HeadCollider : MonoBehaviour
 {
     
     // Proper hit area, 0.5 for 1 total (the original size is 2x the valid area)
-    public Bounds valid;
+    [Tooltip("Valid area, checked after hitting the collider. We only care about the XY area not Z since collider already ensures it's in the correct Z")]
+    public Bounds valid;    // Due to the out-of-sync between logic & physics, it's common that a valid hit is thought as invalid.
     
 
     // Check a position if it's within valid hit zone

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    
+    private Rigidbody rb;
     public Master master;
     public GameObject contact;
     private GameObject child;
@@ -46,6 +46,7 @@ public class Ball : MonoBehaviour
     float audVol = 0.5f;
 
     void Awake() {
+        rb = GetComponent<Rigidbody>();
         vtr = terminal;
         vt = terminal*terminal;
 
@@ -89,35 +90,45 @@ public class Ball : MonoBehaviour
         // This is dynamic ball
         if (moveSpd > 0) {
 
+            // prev stores the position at the beginning of this FixedUpdate step
             prev = transform.position;
 
             float v0 = moveSpd;
             float Dt = Time.time - init;   // Time since start
 
-            // Calculate relative position (not speed) from pos0
-            float x = CurveX(v0, Dt, move2);
-            float y = CurveY(v0, x, move2);
+            // Calculate absolute position relative to initial launch point pos0
+            float x_component = CurveX(v0, Dt, move2);
+            float y_component = CurveY(v0, x_component, move2);
 
-            // Set position forward by x, and up by y
-            transform.position = pos0 + move1.normalized * x + Vector3.up * y;
+            // Calculate the new absolute target position for the ball
+            Vector3 newTargetPosition = pos0 + move1.normalized * x_component + Vector3.up * y_component;
+            
+            dir = newTargetPosition - prev;
+
+            // Move the rigidbody to the new target position
+            rb.MovePosition(newTargetPosition);
+            
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1, Color.yellow);
             
-            // Hit ground
-            if (transform.position.y < 0) {
+            // Hit ground check should use the new target position
+            if (newTargetPosition.y < 0) {
 
                 // Out of bounds
-                if (Master.CourtOut(transform.position)) {
+                if (Master.CourtOut(newTargetPosition)) {
                     master.spawn -= 1;
                 }
 
                 Destroy(gameObject);
+                return;
             }
 
-            // Measure direction & speed
-            dir = transform.position - prev;
-            statSpd = dir.magnitude / Time.deltaTime;
-            child.transform.rotation = Quaternion.LookRotation(dir);    // Rotate the mesh
-
+            // Measure speed and update rotation
+            if (dir.sqrMagnitude > Mathf.Epsilon) {
+                statSpd = dir.magnitude / Time.fixedDeltaTime;
+                child.transform.rotation = Quaternion.LookRotation(dir);    // Rotate the mesh
+            } else {
+                statSpd = 0;
+            }
         }
     }
     

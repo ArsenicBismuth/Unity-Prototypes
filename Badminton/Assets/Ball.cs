@@ -37,7 +37,7 @@ public class Ball : MonoBehaviour
     private LineRenderer lineCurve;
 
     // Logics
-    private float hitCD = 0.5f;
+    public float hitCD = 0.5f;  // Only for statics
     private float lastHit = 0;  // Time of last hit
     private float init = 0;     // Time initialized
 
@@ -151,8 +151,8 @@ public class Ball : MonoBehaviour
 
         contact = collision.gameObject;
 
-        // Prevent multi contacts in short period
-        if (lastHit + hitCD > Time.time) {
+        // Prevent multi contacts in short period for static ones
+        if (moveSpd == 0 && lastHit + hitCD > Time.time) {
             return;
         }
         lastHit = Time.time;

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1711729384089603166}
   - component: {fileID: 1711729384089603165}
   - component: {fileID: 1711729384089603164}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 329
+  m_VersionIndex: 338
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -552,7 +552,7 @@ GameObject:
   - component: {fileID: 5040697337934846863}
   - component: {fileID: 7952565932870750957}
   - component: {fileID: 4173589357492497501}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -595,9 +595,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 6
+  m_Height: 0.5
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: -2.54}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7952565932870750957
 MonoBehaviour:
   m_ObjectHideFlags: 0

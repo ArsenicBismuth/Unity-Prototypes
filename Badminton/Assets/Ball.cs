@@ -64,7 +64,6 @@ public class Ball : MonoBehaviour
         if (moveSpd > 0) {
 
             // Get the visible part of object (child)
-            rb.constraints = RigidbodyConstraints.None;
             child = gameObject.transform.GetChild(0).gameObject;
 
             init = Time.time;
@@ -80,9 +79,6 @@ public class Ball : MonoBehaviour
             // Delete itself after few sec
             Destroy(gameObject, 2);
 
-        } else {
-            // Statics, set constraint on all
-            rb.constraints = RigidbodyConstraints.FreezeAll;
         }
 
     }

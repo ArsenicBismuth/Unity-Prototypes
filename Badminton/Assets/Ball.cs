@@ -14,8 +14,10 @@ public class Ball : MonoBehaviour
     private float vtr;          // terminal itself (alt: root)
     private float vt;           // terminal cubic (alt: terminal itself)
 
+    public float speedMultOnHit = 1.5f; // Shuttle launch speed is higher than racket head
+
     // Physics, dynamic for itself
-    public float moveSpd = -1;
+    public float moveSpd = -1;  // Launch speed, set only once
     private Vector3 pos0;   // Initial position since launched
     private Vector3 move1;  // Forward without y
     private Vector3 move2;  // Dir w/o y-axis rot or yaw (z=0)
@@ -167,7 +169,7 @@ public class Ball : MonoBehaviour
         master.hitMarker.Mark(relative, valid);
 
         // Valid, get hit info
-        if (valid) Draw(racket.GetDir(), racket.GetSpeed());
+        if (valid) Draw(racket.GetDir(), racket.GetSpeed() * speedMultOnHit);
 
         // For dynamic ones
         if (moveSpd > 0 && valid) {

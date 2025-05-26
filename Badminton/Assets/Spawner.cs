@@ -19,6 +19,7 @@ public class Spawner : MonoBehaviour
     [Dropdown("master.Shots", "Name")]
     public ShotData shot;   // The selected shot
     public List<ShotData> plan;
+    public List<GameObject> targets;
     private int iplan = 0;
 
     // Shot UI
@@ -108,19 +109,23 @@ public class Spawner : MonoBehaviour
 
     // UI - Add plan based on current shot (menu) & target
     public void AddPlan() {
-        ShotData select = shot.Clone();
+        ShotData newShot = shot.Clone();
         
         // Create new target cone for this shot, above main cylinder so we can see it
         Vector3 pos = new(target.transform.position.x, target.transform.position.y + 0.2f, target.transform.position.z);
         GameObject targetClone = Instantiate(targetPlan, pos, target.transform.rotation);
-        select.SetTarget(transform, targetClone.transform);
-        plan.Add(select);
+        targets.Add(targetClone);
+        newShot.SetTarget(transform, targetClone.transform);
+        plan.Add(newShot);
         iplan = 0;
         PrintPlan();
     }
 
     public void RemovePlan() {
         plan.RemoveAt(plan.Count - 1);
+        GameObject targetClone = targets[targets.Count - 1];
+        targets.RemoveAt(targets.Count - 1);
+        Destroy(targetClone);
         iplan = 0;
         PrintPlan();
     }

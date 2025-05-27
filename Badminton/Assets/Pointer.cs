@@ -9,7 +9,7 @@ public class Pointer : MonoBehaviour
     public Master master;
 
     // Parameters
-    private int layerMask = 1 << 7 | 1 << 5; // Bit shift to get a bit mask, clickable & UI
+    [SerializeField] LayerMask layerMask;   // Raycast layers
     private int distance = 10;
 
     // New Input System Actions

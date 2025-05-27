@@ -1961,7 +1961,7 @@
                     "name": "Activate",
                     "type": "Button",
                     "id": "41976d89-60de-4deb-bff9-16b4af96b290",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -3331,54 +3331,6 @@
                     "action": "Spawn Object",
                     "isComposite": false,
                     "isPartOfComposite": true
-                }
-            ]
-        },
-        {
-            "name": "XRI Buttons",
-            "id": "89baf1ef-6a02-4357-86d6-e52939a515be",
-            "actions": [
-                {
-                    "name": "A Right",
-                    "type": "Button",
-                    "id": "aa754436-b21e-4832-9b31-3c5be4dd611b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "B Right",
-                    "type": "Button",
-                    "id": "8f46487e-abe6-472c-b041-e59c8ea1c4a1",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "98334bce-4b33-48e7-a283-f09261badb39",
-                    "path": "<XRController>{RightHand}/{PrimaryButton}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "A Right",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4e00ccdd-2b4e-485d-9cf1-e717e910ad48",
-                    "path": "<XRController>{RightHand}/{SecondaryButton}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "B Right",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         }

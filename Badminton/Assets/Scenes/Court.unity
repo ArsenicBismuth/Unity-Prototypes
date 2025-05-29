@@ -7179,7 +7179,7 @@ GameObject:
   - component: {fileID: 419093568}
   - component: {fileID: 419093567}
   - component: {fileID: 419093566}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Net
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11156,7 +11156,7 @@ GameObject:
   - component: {fileID: 599916903}
   - component: {fileID: 599916902}
   - component: {fileID: 599916906}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22139,7 +22139,7 @@ GameObject:
   - component: {fileID: 1608727380}
   - component: {fileID: 1608727382}
   - component: {fileID: 1608727381}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (Legacy)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24868,7 +24868,7 @@ GameObject:
   - component: {fileID: 1805601889}
   - component: {fileID: 1805601888}
   - component: {fileID: 1805601887}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas (GUI) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38744,7 +38744,7 @@ CharacterController:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -38755,7 +38755,7 @@ CharacterController:
   m_Height: 1.36144
   m_Radius: 0.1
   m_SlopeLimit: 45
-  m_StepOffset: 0.1
+  m_StepOffset: 0.001
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.76072, z: 0}
